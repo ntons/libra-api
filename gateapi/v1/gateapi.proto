@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = ".;gateapi";
+
+package gateapi;
+
+import "google/protobuf/any.proto";
+
+service GateV1 {
+    rpc Push(PushReq) returns (PushRes);
+    rpc Subscribe(SubscribeReq) returns (SubscribeRes);
+}
+
+message PushReq {
+    uint64 id = 1;
+    google.protobuf.Any data = 10;
+}
+message PushRes {
+}
+
+message SubscribeReq {
+    string channel = 1;
+}
+message SubscribeRes {
+}
+

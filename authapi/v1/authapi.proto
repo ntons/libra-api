@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = ".;authapi";
+
+package authapi;
+
+message RoleInfo {
+    uint32 rid = 1;
+    uint32 uid = 2;
+    uint32 sid = 3;
+}
+
+service AuthV1 {
+    // 验证token有效性
+    rpc Verify(VerifyReq) returns(VerifyRes);
+    // 更新token有效期
+    rpc Refresh(RefreshReq) returns(RefreshRes);
+    // 保持token有效，并接收吊销通知
+    rpc Maintain(MaintainReq) returns(stream MaintainRes);
+}
+
+message VerifyReq {
+    string token = 1;
+}
+message VerifyRes {
+    RoleInfo role = 10;
+}
+
+message RefreshReq {
+    string token = 1;
+}
+message RefreshRes {
+    int64 expiration = 2;
+}
+
+message MaintainReq {
+    string token = 1;
+}
+message MaintainRes {
+}

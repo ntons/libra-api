@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = ".;gameapi";
+
+package gameapi;
+
+message Msg {
+    uint32 cmd  = 1;
+    uint32 err  = 2;
+    bytes  data = 10;
+}
+
+service GameV1 {
+    // 网关登录
+    rpc GateLogin(GateLoginReq) returns(GateLoginRes);
+    // 网关登出
+    rpc GateLogout(GateLogoutReq) returns(GateLogoutRes);
+}
+
+message GateLoginReq {
+}
+message GateLoginRes {
+}
+
+message GateLogoutReq {
+}
+message GateLogoutRes {
+}
+

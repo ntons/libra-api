@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option go_package = ".;dbapi";
+
+import "google/protobuf/descriptor.proto";
+
+package dbapi;
+
+service DBV1 {
+    rpc RegisterSchema(RegisterSchemaReq) returns (RegisterSchemaRes) {}
+
+    rpc Get(GetReq)             returns(GetRes);
+    rpc LockGet(LockGetReq)     returns(LockGetRes);
+    rpc SetUnlock(SetUnlockReq) returns(SetUnlockRes);
+    rpc Unlock(UnlockReq)       returns(UnlockRes);
+}
+
+message RegisterSchemaReq {
+    // proto file descriptor set
+    google.protobuf.FileDescriptorSet descriptor_set = 1;
+    // proto message name
+    string message_name = 2;
+}
+message RegisterSchemaRes {
+    // unique identifier for registered proto
+    string schema = 1;
+}
+
+message Data {
+    string key   = 1;
+    // got value could be 0-len, means new created
+    // set value should not be 0-len which means don't update(unlock only)
+    bytes  value = 2;
+    string token = 3;
+}
+
+message GetReq {
+    repeated string keys = 2;
+}
+message GetRes {
+    repeated Data data = 1; // token will be omitted
+}
+
+enum Mode {
+    Mode0  = 0; // lock/create the key not matter exist or not
+    ModeXX = 1; // Only lock the key if it already exist.
+}
+
+message LockGetReq {
+    Mode mode = 1;
+    repeated string keys = 2;
+}
+message LockGetRes {
+    repeated Data data = 1;
+}
+
+message SetUnlockReq {
+    repeated Data data = 1;
+}
+message SetUnlockRes {
+}
+
+message UnlockReq {
+    repeated Data data = 1;
+}
+message UnlockRes {
+}

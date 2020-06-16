@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = ".;gateapi";
+
+package gateapi;
+
+message SessInfo {
+    uint64 id      = 1; // 会话ID
+    uint32 game_id = 2; // 游戏ID
+    uint32 user_id = 3; // 用户ID
+    uint32 zone_id = 4; // 区服ID
+    uint32 role_id = 5; // 角色ID <==11对应==> (GameId, UserId, ZoneId)
+}
+
