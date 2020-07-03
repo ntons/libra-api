@@ -7,21 +7,21 @@ import "google/protobuf/descriptor.proto";
 package dbapi;
 
 service DBV1 {
-    rpc RegisterSchema(RegisterSchemaReq) returns (RegisterSchemaRes) {}
+    rpc RegisterSchema(RegisterSchemaRequest) returns (RegisterSchemaResponse) {}
 
-    rpc Get(GetReq)             returns(GetRes);
-    rpc LockGet(LockGetReq)     returns(LockGetRes);
-    rpc SetUnlock(SetUnlockReq) returns(SetUnlockRes);
-    rpc Unlock(UnlockReq)       returns(UnlockRes);
+    rpc Get(GetRequest)             returns(GetResponse);
+    rpc LockGet(LockGetRequest)     returns(LockGetResponse);
+    rpc SetUnlock(SetUnlockRequest) returns(SetUnlockResponse);
+    rpc Unlock(UnlockRequest)       returns(UnlockResponse);
 }
 
-message RegisterSchemaReq {
+message RegisterSchemaRequest {
     // proto file descriptor set
     google.protobuf.FileDescriptorSet descriptor_set = 1;
     // proto message name
     string message_name = 2;
 }
-message RegisterSchemaRes {
+message RegisterSchemaResponse {
     // unique identifier for registered proto
     string schema = 1;
 }
@@ -34,10 +34,10 @@ message Data {
     string token = 3;
 }
 
-message GetReq {
+message GetRequest {
     repeated string keys = 2;
 }
-message GetRes {
+message GetResponse {
     repeated Data data = 1; // token will be omitted
 }
 
@@ -46,22 +46,22 @@ enum Mode {
     ModeXX = 1; // Only lock the key if it already exist.
 }
 
-message LockGetReq {
+message LockGetRequest {
     Mode mode = 1;
     repeated string keys = 2;
 }
-message LockGetRes {
+message LockGetResponse {
     repeated Data data = 1;
 }
 
-message SetUnlockReq {
+message SetUnlockRequest {
     repeated Data data = 1;
 }
-message SetUnlockRes {
+message SetUnlockResponse {
 }
 
-message UnlockReq {
+message UnlockRequest {
     repeated Data data = 1;
 }
-message UnlockRes {
+message UnlockResponse {
 }

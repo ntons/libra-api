@@ -12,18 +12,18 @@ message Msg {
 
 service GameV1 {
     // 网关登录
-    rpc GateLogin(GateLoginReq) returns(GateLoginRes);
+    rpc SignIn(SignInRequest) returns(SignInResponse);
     // 网关登出
-    rpc GateLogout(GateLogoutReq) returns(GateLogoutRes);
+    rpc SignOut(SignOutRequest) returns(SignOutResponse);
 }
 
-message GateLoginReq {
+message SignInRequest {
 }
-message GateLoginRes {
+message SignInResponse {
 }
 
-message GateLogoutReq {
+message SignOutRequest {
 }
-message GateLogoutRes {
+message SignOutResponse {
 }
 

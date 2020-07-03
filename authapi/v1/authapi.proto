@@ -12,29 +12,29 @@ message RoleInfo {
 
 service AuthV1 {
     // 验证token有效性
-    rpc Verify(VerifyReq) returns(VerifyRes);
+    rpc Verify(VerifyRequest) returns(VerifyResponse);
     // 更新token有效期
-    rpc Refresh(RefreshReq) returns(RefreshRes);
+    rpc Refresh(RefreshRequest) returns(RefreshResponse);
     // 保持token有效，并接收吊销通知
-    rpc Maintain(MaintainReq) returns(stream MaintainRes);
+    rpc Maintain(MaintainRequest) returns(stream MaintainResponse);
 }
 
-message VerifyReq {
+message VerifyRequest {
     string token = 1;
 }
-message VerifyRes {
+message VerifyResponse {
     RoleInfo role = 10;
 }
 
-message RefreshReq {
+message RefreshRequest {
     string token = 1;
 }
-message RefreshRes {
+message RefreshResponse {
     int64 expiration = 2;
 }
 
-message MaintainReq {
+message MaintainRequest {
     string token = 1;
 }
-message MaintainRes {
+message MaintainResponse {
 }

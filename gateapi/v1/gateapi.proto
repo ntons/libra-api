@@ -2,25 +2,36 @@ syntax = "proto3";
 
 option go_package = ".;gateapi";
 
-package gateapi;
-
 import "google/protobuf/any.proto";
 
+package gateapi;
+
 service GateV1 {
-    rpc Push(PushReq) returns (PushRes);
-    rpc Subscribe(SubscribeReq) returns (SubscribeRes);
+    // Push message to client
+    rpc Push(PushRequest) returns (PushResponse);
+    // Subscribe a broadcast channel
+    rpc Subscribe(SubscribeRequest) returns (SubscribeResponse);
 }
 
-message PushReq {
-    uint64 id = 1;
+service GateExtV1 {
+    // Establish the push stream
+    rpc SignIn(SignInRequest) returns (stream SignInResponse);
+}
+
+message PushRequest {
+    uint64 role_id = 1;
     google.protobuf.Any data = 10;
 }
-message PushRes {
+message PushResponse {
 }
 
-message SubscribeReq {
-    string channel = 1;
+message SubscribeRequest {
 }
-message SubscribeRes {
+message SubscribeResponse {
 }
 
+message SignInRequest {
+}
+message SignInResponse {
+    google.protobuf.Any data = 1;
+}
