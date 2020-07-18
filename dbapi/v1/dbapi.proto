@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option go_package = ".;dbapi";
 
+import "dbapi/v1/archive.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
 package dbapi;
@@ -13,6 +15,12 @@ service DBV1 {
     rpc LockGet(LockGetRequest)     returns(LockGetResponse);
     rpc SetUnlock(SetUnlockRequest) returns(SetUnlockResponse);
     rpc Unlock(UnlockRequest)       returns(UnlockResponse);
+
+    rpc GetArchive(GetArchiveRequest) returns(GetArchiveResponse);
+    rpc SetArchive(SetArchiveRequest) returns(SetArchiveResponse);
+    rpc SetModel(SetModelRequest) returns(SetModelResponse);
+    rpc SetMetadata(SetMetadataRequest) returns(SetMetadataResponse);
+
 }
 
 message RegisterSchemaRequest {
@@ -65,3 +73,33 @@ message UnlockRequest {
 }
 message UnlockResponse {
 }
+
+
+message GetArchiveRequest {
+    string id = 1;
+}
+message GetArchiveResponse {
+    Archive archive = 1;
+}
+
+message SetArchiveRequest {
+    Archive archive = 1;
+}
+message SetArchiveResponse {
+}
+
+message SetModelRequest {
+    string id = 1;
+    google.protobuf.Any model = 2;
+}
+message SetModelResponse {
+}
+
+message SetMetadataRequest {
+    string id = 1;
+    string key = 2;
+    google.protobuf.Any metadata = 3;
+}
+message SetMetadataResponse {
+}
+

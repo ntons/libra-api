@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = ".;dbapi";
+
+import "google/protobuf/any.proto";
+
+package dbapi;
+
+// Archive structure
+message Archive {
+    // unique archive id
+    string id = 1;
+    // primary archive payload
+    google.protobuf.Any model = 2;
+    // secondary metadata
+    map<string, google.protobuf.Any> metadata = 3;
+}
