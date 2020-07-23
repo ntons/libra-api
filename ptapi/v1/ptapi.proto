@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = ".;ptapi";
+package libra.ptapi.v1;
 
-package ptapi;
+option go_package = ".;libra_ptapi_v1";
 
 message RoleInfo {
     uint32 rid = 1;
@@ -10,7 +10,7 @@ message RoleInfo {
     uint32 sid = 3;
 }
 
-service PTV1 {
+service PT {
     // 验证token有效性
     rpc Verify(VerifyRequest) returns(VerifyResponse);
     // 更新token有效期

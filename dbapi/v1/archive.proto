@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-option go_package = ".;dbapi";
+package libra.dbapi.v1;
+
+option go_package = ".;libra_dbapi_v1";
 
 import "google/protobuf/any.proto";
-
-package dbapi;
 
 // Archive structure
 message Archive {

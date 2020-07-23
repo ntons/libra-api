@@ -1,19 +1,19 @@
 syntax = "proto3";
 
-option go_package = ".;gateapi";
+package libra.gateapi.v1;
+
+option go_package = ".;libra_gateapi_v1";
 
 import "google/protobuf/any.proto";
 
-package gateapi;
-
-service GateV1 {
+service Gate {
     // Push message to client
     rpc Push(PushRequest) returns (PushResponse);
     // Subscribe a broadcast channel
     rpc Subscribe(SubscribeRequest) returns (SubscribeResponse);
 }
 
-service GateExtV1 {
+service GateExt {
     // Establish the push stream
     rpc SignIn(SignInRequest) returns (stream SignInResponse);
 }

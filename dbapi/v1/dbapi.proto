@@ -1,14 +1,14 @@
 syntax = "proto3";
 
-option go_package = ".;dbapi";
+package libra.dbapi.v1;
+
+option go_package = ".;libra_dbapi_v1";
 
 import "dbapi/v1/archive.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
-package dbapi;
-
-service DBV1 {
+service DB {
     rpc RegisterSchema(RegisterSchemaRequest) returns (RegisterSchemaResponse) {}
 
     rpc Get(GetRequest)             returns(GetResponse);

@@ -1,0 +1,31 @@
+// portal account service
+syntax = "proto3";
+
+package libra.ptapi.v1;
+
+option go_package = ".;libra_ptapi_v1";
+
+import "google/api/annotations.proto";
+
+service Account {
+    rpc Login(LoginRequest) returns(LoginResponse) {
+        option (google.api.http) = {
+            post: "/libra/ptapi/v1/account/login"
+            body: "*"
+        };
+    }
+}
+
+message LoginRequest {
+    message Dev {
+        string account = 1;
+    }
+    message Wechat {
+        string token = 1;
+    }
+    Dev     dev     = 1;
+    Wechat  wechat  = 2;
+}
+message LoginResponse {
+    string token = 1;
+}

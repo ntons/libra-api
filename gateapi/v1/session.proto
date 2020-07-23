@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = ".;gateapi";
+package libra.gateapi.v1;
 
-package gateapi;
+option go_package = ".;libra_gateapi_v1";
 
 message SessInfo {
     uint64 id      = 1; // 会话ID
