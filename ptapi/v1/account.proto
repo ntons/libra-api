@@ -1,4 +1,5 @@
 // portal account service
+// UserId + Token =
 syntax = "proto3";
 
 package libra.ptapi.v1;
@@ -6,26 +7,91 @@ package libra.ptapi.v1;
 option go_package = ".;libra_ptapi_v1";
 
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
 
+// common queries (app_id, nonce, sign)
 service Account {
-    rpc Login(LoginRequest) returns(LoginResponse) {
+    // user login
+    // app_id + state => user + token
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
         option (google.api.http) = {
-            post: "/libra/ptapi/v1/account/login"
+            post: "/libra/ptapi/v1/account/user"
+            body: "*"
+        };
+    }
+    // list roles of user
+    // token => roles
+    rpc ListRoles (ListRolesRequest) returns (ListRolesResponse) {
+        option (google.api.http) = {
+            get:  "/libra/ptapi/v1/account/role"
+        };
+    }
+    // create new role for user
+    // token + zone_id => role
+    rpc CreateRole (CreateRoleRequest) returns (CreateRoleResponse) {
+        option (google.api.http) = {
+            put:  "/libra/ptapi/v1/account/role"
+            body: "*"
+        };
+    }
+    // login a role
+    // token + role_id => token
+    rpc LoginRole (LoginRoleRequest) returns (LoginRoleResponse) {
+        option (google.api.http) = {
+            post: "/libra/ptapi/v1/account/role"
             body: "*"
         };
     }
 }
 
-message LoginRequest {
-    message Dev {
-        string account = 1;
-    }
-    message Wechat {
-        string token = 1;
-    }
-    Dev     dev     = 1;
-    Wechat  wechat  = 2;
+message User {
+    uint64 id      = 1;
 }
-message LoginResponse {
+message Role {
+    uint64 id       = 1;
+    uint32 zone_id  = 2;
+}
+
+message LoginUserRequest {
+    string  sign    = 1;
+    string  nonce   = 2;
+    string  app_id  = 3;
+    google.protobuf.Any state = 4;
+}
+message LoginUserResponse {
+    string  token   = 1;
+    User    user    = 2;
+}
+
+message ListRolesRequest {
+    string  sign    = 1;
+    string  nonce   = 2;
+    string  app_id  = 3;
+    string  token   = 4;
+}
+message ListRolesResponse {
+    repeated Role roles = 1;
+}
+
+message CreateRoleRequest {
+    string  sign    = 1;
+    string  nonce   = 2;
+    string  app_id  = 3;
+    string  token   = 4;
+    uint32  zone_id = 5;
+}
+message CreateRoleResponse {
+    Role role = 1;
+}
+
+message LoginRoleRequest {
+    string sign     = 1;
+    string nonce    = 2;
+    string app_id   = 3;
+    string token    = 4;
+    uint64 role_id  = 5;
+}
+message LoginRoleResponse {
     string token = 1;
 }
+

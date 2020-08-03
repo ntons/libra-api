@@ -15,7 +15,7 @@ service Gate {
 
 service GateExt {
     // Establish the push stream
-    rpc SignIn(SignInRequest) returns (stream SignInResponse);
+    rpc SignIn(SignInRequest) returns (stream google.protobuf.Any);
 }
 
 message PushRequest {
@@ -31,7 +31,4 @@ message SubscribeResponse {
 }
 
 message SignInRequest {
-}
-message SignInResponse {
-    google.protobuf.Any data = 1;
 }
