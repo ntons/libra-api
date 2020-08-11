@@ -10,7 +10,7 @@ message RoleInfo {
     uint32 sid = 3;
 }
 
-service PT {
+service Portal {
     // 验证token有效性
     rpc Verify(VerifyRequest) returns(VerifyResponse);
     // 更新token有效期

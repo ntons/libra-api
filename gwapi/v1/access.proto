@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package libra.gwapi.v1;
+
+option go_package = ".;libra_gwapi_v1";
+
+import "google/protobuf/any.proto";
+
+service Access {
+    // Establish the push stream
+    rpc SignIn(SignInRequest) returns (stream google.protobuf.Any);
+}
+
+message SignInRequest {
+}

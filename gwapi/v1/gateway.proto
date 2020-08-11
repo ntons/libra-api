@@ -1,21 +1,16 @@
 syntax = "proto3";
 
-package libra.gateapi.v1;
+package libra.gwapi.v1;
 
-option go_package = ".;libra_gateapi_v1";
+option go_package = ".;libra_gwapi_v1";
 
 import "google/protobuf/any.proto";
 
-service Gate {
+service Gateway {
     // Push message to client
     rpc Push(PushRequest) returns (PushResponse);
     // Subscribe a broadcast channel
     rpc Subscribe(SubscribeRequest) returns (SubscribeResponse);
-}
-
-service GateExt {
-    // Establish the push stream
-    rpc SignIn(SignInRequest) returns (stream google.protobuf.Any);
 }
 
 message PushRequest {
@@ -30,5 +25,3 @@ message SubscribeRequest {
 message SubscribeResponse {
 }
 
-message SignInRequest {
-}
