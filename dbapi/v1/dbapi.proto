@@ -5,22 +5,22 @@ package libra.dbapi.v1;
 option go_package = ".;libra_dbapi_v1";
 
 import "dbapi/v1/archive.proto";
-import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
 service DB {
     rpc RegisterSchema(RegisterSchemaRequest) returns (RegisterSchemaResponse) {}
-
-    rpc Get(GetRequest)             returns(GetResponse);
-    rpc LockGet(LockGetRequest)     returns(LockGetResponse);
-    rpc SetUnlock(SetUnlockRequest) returns(SetUnlockResponse);
-    rpc Unlock(UnlockRequest)       returns(UnlockResponse);
-
-    rpc GetArchive(GetArchiveRequest) returns(GetArchiveResponse);
-    rpc SetArchive(SetArchiveRequest) returns(SetArchiveResponse);
-    rpc SetModel(SetModelRequest) returns(SetModelResponse);
-    rpc SetMetadata(SetMetadataRequest) returns(SetMetadataResponse);
-
+    // lock/unlock archive mutex
+    rpc Lock   (ArchiveGetRequest) returns (ArchiveGetResponse);
+    rpc Unlock (ArchiveSetRequest) returns (ArchiveSetResponse);
+    // get/set whole archive
+    rpc GetArchive (ArchiveGetRequest) returns (ArchiveGetResponse);
+    rpc SetArchive (ArchiveSetRequest) returns (ArchiveSetResponse);
+    // get/set archive model
+    rpc GetModel (ArchiveGetRequest) returns (ArchiveGetResponse);
+    rpc SetModel (ArchiveSetRequest) returns (ArchiveSetResponse);
+    // get/set archive metadata
+    rpc GetMetadata (ArchiveGetRequest) returns (ArchiveGetResponse);
+    rpc SetMetadata (ArchiveSetRequest) returns (ArchiveSetResponse);
 }
 
 message RegisterSchemaRequest {
@@ -34,72 +34,22 @@ message RegisterSchemaResponse {
     string schema = 1;
 }
 
-message Data {
-    string key   = 1;
-    // got value could be 0-len, means new created
-    // set value should not be 0-len which means don't update(unlock only)
-    bytes  value = 2;
-    string token = 3;
+// All methods work around archive, so that all request and response could be the same
+message ArchiveGetRequest {
+    string  id = 1;
+    Archive add_if_not_exists = 2;
+    //string  token = 10;
+    bool    with_lock = 11;
 }
-
-message GetRequest {
-    repeated string keys = 2;
+message ArchiveGetResponse {
+    Archive archive = 1;
+    string  token = 10;
 }
-message GetResponse {
-    repeated Data data = 1; // token will be omitted
+message ArchiveSetRequest {
+    Archive archive = 1;
+    string  token = 10;
+    bool    with_unlock = 11;
 }
-
-enum Mode {
-    Mode0  = 0; // lock/create the key not matter exist or not
-    ModeXX = 1; // Only lock the key if it already exist.
-}
-
-message LockGetRequest {
-    Mode mode = 1;
-    repeated string keys = 2;
-}
-message LockGetResponse {
-    repeated Data data = 1;
-}
-
-message SetUnlockRequest {
-    repeated Data data = 1;
-}
-message SetUnlockResponse {
-}
-
-message UnlockRequest {
-    repeated Data data = 1;
-}
-message UnlockResponse {
-}
-
-
-message GetArchiveRequest {
-    string id = 1;
-}
-message GetArchiveResponse {
+message ArchiveSetResponse {
     Archive archive = 1;
 }
-
-message SetArchiveRequest {
-    Archive archive = 1;
-}
-message SetArchiveResponse {
-}
-
-message SetModelRequest {
-    string id = 1;
-    google.protobuf.Any model = 2;
-}
-message SetModelResponse {
-}
-
-message SetMetadataRequest {
-    string id = 1;
-    string key = 2;
-    google.protobuf.Any metadata = 3;
-}
-message SetMetadataResponse {
-}
-

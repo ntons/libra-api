@@ -1,5 +1,8 @@
 // portal account service
-// UserId + Token =
+// 1. Login to the user supplier, then an account login state can be got.
+// 2. Login pt with account state, a token will be returned for identifing user.
+// 3. List roles and select or create one to sign in, a ticket will be returned.
+// 4. Communicate with libra grpc servers with above ticket
 syntax = "proto3";
 
 package libra.ptapi.v1;
@@ -9,59 +12,111 @@ option go_package = ".;libra_ptapi_v1";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 
-// common queries (app_id, nonce, sign)
+// An instance of user is mapped from tuple(app, acct_src, acct_id).
+message User {
+    // primary key
+    string id       = 1;
+    // union key
+    string app_id   = 2;
+    string acct_src = 3;
+    string acct_id  = 4;
+    // custom key-value metadata
+    map<string, string> metadata = 15;
+}
+
+// Instances of role are mapped from tuple(app, user)
+// Multiple roles could be created in one app by the same user
+message Role {
+    // primary key
+    string id       = 1;
+    // union key
+    string app_id   = 2;
+    string user_id  = 3;
+    // custom key-value metadata
+    map<string, string> metadata = 15;
+}
+
 service Account {
-    // user login
-    // app_id + state => user + token
-    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+    rpc Login (LoginRequest) returns (LoginResponse) {
         option (google.api.http) = {
-            post: "/libra/ptapi/v1/account/user"
+            post: "/ptapi/v1/account/user"
             body: "*"
+            additional_bindings {
+                post: "/ptapi/v1/account/login"
+                body: "*"
+            }
         };
     }
-    // list roles of user
-    // token => roles
+
     rpc ListRoles (ListRolesRequest) returns (ListRolesResponse) {
         option (google.api.http) = {
-            get:  "/libra/ptapi/v1/account/role"
+            get:  "/ptapi/v1/account/role"
+            additional_bindings {
+                get: "/ptapi/v1/account/listroles"
+            }
         };
     }
-    // create new role for user
-    // token + zone_id => role
+
     rpc CreateRole (CreateRoleRequest) returns (CreateRoleResponse) {
         option (google.api.http) = {
-            put:  "/libra/ptapi/v1/account/role"
+            put:  "/ptapi/v1/account/role"
             body: "*"
+            additional_bindings {
+                post: "/ptapi/v1/account/createrole"
+                body: "*"
+            }
         };
     }
-    // login a role
-    // token + role_id => token
-    rpc LoginRole (LoginRoleRequest) returns (LoginRoleResponse) {
+
+    rpc SignIn (SignInRequest) returns (SignInResponse) {
         option (google.api.http) = {
-            post: "/libra/ptapi/v1/account/role"
+            post: "/ptapi/v1/account/role"
             body: "*"
+            additional_bindings {
+                post: "/ptapi/v1/account/signin"
+                body: "*"
+            }
+        };
+    }
+
+    rpc SetUserMetadata (SetUserMetadataRequest) returns (SetUserMetadataResponse) {
+        option (google.api.http) = {
+            post: "/ptapi/v1/account/user/metadata"
+            body: "*"
+            additional_bindings {
+                post: "/ptapi/v1/account/setusermetadata"
+                body: "*"
+            }
+        };
+    }
+
+    rpc SetRoleMetadata (SetRoleMetadataRequest) returns (SetRoleMetadataResponse) {
+        option (google.api.http) = {
+            post: "/ptapi/v1/account/role/metadata"
+            body: "*"
+            additional_bindings {
+                post: "/ptapi/v1/account/setrolemetadata"
+                body: "*"
+            }
         };
     }
 }
 
-message User {
-    uint64 id      = 1;
+message LoginRequest {
+    string sign     = 1;
+    string nonce    = 2;
+    string app_id   = 3;
+    //string acct_src = 4;
+    google.protobuf.Any state = 5;
 }
-message Role {
-    uint64 id       = 1;
-    uint32 zone_id  = 2;
-}
-
-message LoginUserRequest {
-    string  sign    = 1;
-    string  nonce   = 2;
-    string  app_id  = 3;
-    google.protobuf.Any state = 4;
-}
-message LoginUserResponse {
+message LoginResponse {
+    // Token will be set to cookie "x-libra-token" as well.
+    // A token field should be set to request if cookie is not supported.
+    // Both cookie and field are set, cookie is preferred.
     string  token   = 1;
     User    user    = 2;
 }
+
 
 message ListRolesRequest {
     string  sign    = 1;
@@ -78,20 +133,41 @@ message CreateRoleRequest {
     string  nonce   = 2;
     string  app_id  = 3;
     string  token   = 4;
-    uint32  zone_id = 5;
+    int32   index   = 5; // role index to prevent duplicate creation
 }
 message CreateRoleResponse {
     Role role = 1;
 }
 
-message LoginRoleRequest {
+message SignInRequest {
     string sign     = 1;
     string nonce    = 2;
     string app_id   = 3;
     string token    = 4;
-    uint64 role_id  = 5;
+    string role_id  = 5;
 }
-message LoginRoleResponse {
-    string token = 1;
+message SignInResponse {
+    string ticket = 1;
+    Role   role   = 2;
 }
 
+message SetUserMetadataRequest {
+    string sign     = 1;
+    string nonce    = 2;
+    string app_id   = 3;
+    string token    = 4;
+    map<string, string> metadata = 5;
+}
+message SetUserMetadataResponse {
+}
+
+message SetRoleMetadataRequest {
+    string  sign    = 1;
+    string  nonce   = 2;
+    string  app_id  = 3;
+    string  token   = 4;
+    string  role_id = 5;
+    map<string, string> metadata = 6;
+}
+message SetRoleMetadataResponse {
+}

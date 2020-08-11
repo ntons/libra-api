@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package libra_acct_v1;
+
+option go_package = ".;libra_acct_v1";
+
+// Acct state of development
+message Dev {
+    string username = 1;
+}
