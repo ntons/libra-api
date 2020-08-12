@@ -37,7 +37,7 @@ message RegisterSchemaResponse {
 // All methods work around archive, so that all request and response could be the same
 message ArchiveGetRequest {
     string  id = 1;
-    Archive add_if_not_exists = 2;
+    Archive add_if_not_found = 2;
     //string  token = 10;
     bool    with_lock = 11;
 }
