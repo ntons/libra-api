@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package libra.mvc.v1;
+package libra.sdk.v1;
 
-option go_package = ".;libra_mvc_v1";
+option go_package = ".;libra_sdk_v1";
 
 import "google/protobuf/any.proto";
 
