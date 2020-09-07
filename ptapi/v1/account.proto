@@ -115,23 +115,26 @@ message LoginResponse {
 }
 
 message ListRolesRequest {
-    string token = 1;
+    string app_id = 1;
+    string token = 2;
 }
 message ListRolesResponse {
     repeated Role roles = 1;
 }
 
 message CreateRoleRequest {
-    string token = 1;
-    int32 index = 2; // role index to prevent duplicate creation
+    string app_id = 1;
+    string token = 2;
+    int32 index = 3; // role index to prevent duplicate creation
 }
 message CreateRoleResponse {
     Role role = 1;
 }
 
 message SignInRequest {
-    string token = 1;
-    string role_id = 2;
+    string app_id = 1;
+    string token = 2;
+    string role_id = 3;
 }
 message SignInResponse {
     string ticket = 1;
@@ -139,16 +142,18 @@ message SignInResponse {
 }
 
 message SetUserMetadataRequest {
-    string token = 1;
-    map<string, string> metadata = 2;
+    string app_id = 1;
+    string token = 2;
+    map<string, string> metadata = 3;
 }
 message SetUserMetadataResponse {
 }
 
 message SetRoleMetadataRequest {
-    string token = 1;
-    string role_id = 2;
-    map<string, string> metadata = 3;
+    string app_id = 1;
+    string token = 2;
+    string role_id = 3;
+    map<string, string> metadata = 4;
 }
 message SetRoleMetadataResponse {
 }
