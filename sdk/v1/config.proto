@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.sdk.v1;
 
-option go_package = ".;libra_sdk_v1";
+option go_package = "github.com/ntons/libra-go/api/sdk/v1;sdk_v1";
 
 // grpc/rest service endpoint
 message Endpoint {

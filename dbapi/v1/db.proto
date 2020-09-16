@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.dbapi.v1;
 
-option go_package = ".;libra_dbapi_v1";
+option go_package = "github.com/ntons/libra-go/api/dbapi/v1;dbapi_v1";
 
 import "dbapi/v1/archive.proto";
 import "google/protobuf/descriptor.proto";

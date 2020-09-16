@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.gwapi.v1;
 
-option go_package = ".;libra_gwapi_v1";
+option go_package = "github.com/ntons/libra-go/api/gwapi/v1;gwapi_v1";
 
 import "google/protobuf/any.proto";
 

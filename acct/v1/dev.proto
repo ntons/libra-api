@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package libra_acct_v1;
+package libra.acct.v1;
 
-option go_package = ".;libra_acct_v1";
+option go_package = "github.com/ntons/libra-go/api/acct/v1;acct_v1";
 
 // Acct state of development
 message Dev {

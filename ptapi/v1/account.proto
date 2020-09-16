@@ -7,7 +7,7 @@ syntax = "proto3";
 
 package libra.ptapi.v1;
 
-option go_package = ".;libra_ptapi_v1";
+option go_package = "github.com/ntons/libra-go/api/ptapi/v1;ptapi_v1";
 
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
