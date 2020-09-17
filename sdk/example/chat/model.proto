@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package libra.sdk.example.chat;
+
+option go_package = "github.com/ntons/libra-go/api/sdk/example/chat";
+
+import "chat.proto";
+
+message Model {
+    repeated ChatMessage history = 1;
+}
