@@ -11,7 +11,7 @@ message ChatMessage {
 }
 
 service Chat {
-    rpc Send(ChatMessage) returns (SendResponse);
+    rpc Send(SendRequest) returns (SendResponse);
 }
 
 message SendRequest {

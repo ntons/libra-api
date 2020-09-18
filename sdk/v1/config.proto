@@ -4,6 +4,8 @@ package libra.sdk.v1;
 
 option go_package = "github.com/ntons/libra-go/api/sdk/v1;sdk_v1";
 
+import "google/protobuf/struct.proto";
+
 // grpc/rest service endpoint
 message Endpoint {
     string address = 1;
@@ -16,4 +18,6 @@ message ServerConfig {
     string bind = 1;
     // services access point
     Endpoint access_point = 2;
+    // application configuration
+    google.protobuf.Struct app = 3;
 }
