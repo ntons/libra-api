@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package libra.sdk.example.echo;
+
+option go_package = "github.com/ntons/libra-go/api/sdk/example/echo";
+
+message Model {
+    repeated string history = 1;
+}
