@@ -4,7 +4,7 @@ package libra.thirdparty.dev;
 
 option go_package = "github.com/ntons/libra-go/api/thirdparty/dev;dev";
 
-// login state of development
-message DevLoginState {
+// login state of dev
+message LoginState {
     string username = 1;
 }
