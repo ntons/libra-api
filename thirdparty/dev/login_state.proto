@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package libra.thirdparty.dev;
+
+option go_package = "github.com/ntons/libra-go/api/thirdparty/dev;dev";
+
+// login state of development
+message DevLoginState {
+    string username = 1;
+}
