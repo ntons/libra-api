@@ -5,97 +5,108 @@
 // 4. Communicate with libra grpc servers with above ticket
 syntax = "proto3";
 
-package libra.ptapi.v1;
+package libra.pt.v1;
 
-option go_package = "github.com/ntons/libra-go/api/ptapi/v1;ptapi_v1";
+option go_package = "github.com/ntons/libra-go/api/pt/v1;pt_v1";
 
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 
-// An instance of user is mapped from tuple(app, acct_src, acct_id).
+// An instance of user is mapped from tuple(app, acct_type, acct_id).
 message User {
-    // primary key
-    string id       = 1;
-    // union key
-    string app_id   = 2;
-    string acct_src = 3;
-    string acct_id  = 4;
-    // custom key-value metadata
+    string id = 1;
+    string acct_type = 2;
+    repeated string acct_id  = 4;
     map<string, string> metadata = 15;
 }
 
 // Instances of role are mapped from tuple(app, user)
 // Multiple roles could be created in one app by the same user
 message Role {
-    // primary key
-    string id       = 1;
-    // union key
-    string app_id   = 2;
-    string user_id  = 3;
-    // custom key-value metadata
+    string id = 1;
+    string user_id = 3;
     map<string, string> metadata = 15;
 }
 
 service Account {
+    // Login verify the login state and return associate user
+    //  and a token as passport
     rpc Login (LoginRequest) returns (LoginResponse) {
         option (google.api.http) = {
-            post: "/ptapi/v1/account/user"
+            post: "/pt/v1/account/user"
             body: "*"
             additional_bindings {
-                post: "/ptapi/v1/account/login"
+                post: "/pt/v1/account/login"
                 body: "*"
             }
         };
     }
 
+    // Bind another acct_id to user
+    rpc Bind (BindRequest) returns (BindResponse) {
+        option (google.api.http) = {
+            put: "/pt/v1/account/user"
+            body: "*"
+            additional_bindings {
+                post: "/pt/v1/account/bind"
+                body: "*"
+            }
+        };
+    }
+
+    // List roles which belonging to the user
     rpc ListRoles (ListRolesRequest) returns (ListRolesResponse) {
         option (google.api.http) = {
-            get:  "/ptapi/v1/account/role"
+            get:  "/pt/v1/account/role"
             additional_bindings {
-                get: "/ptapi/v1/account/listroles"
+                get: "/pt/v1/account/listroles"
             }
         };
     }
 
+    // Create role to the user
     rpc CreateRole (CreateRoleRequest) returns (CreateRoleResponse) {
         option (google.api.http) = {
-            put:  "/ptapi/v1/account/role"
+            put:  "/pt/v1/account/role"
             body: "*"
             additional_bindings {
-                post: "/ptapi/v1/account/createrole"
+                post: "/pt/v1/account/createrole"
                 body: "*"
             }
         };
     }
 
+    // Sign in the role, get a ticket as passport
     rpc SignIn (SignInRequest) returns (SignInResponse) {
         option (google.api.http) = {
-            post: "/ptapi/v1/account/role"
+            post: "/pt/v1/account/role"
             body: "*"
             additional_bindings {
-                post: "/ptapi/v1/account/signin"
+                post: "/pt/v1/account/signin"
                 body: "*"
             }
         };
     }
 
+    // Set metadata of the user
     rpc SetUserMetadata (SetUserMetadataRequest) returns (SetUserMetadataResponse) {
         option (google.api.http) = {
-            post: "/ptapi/v1/account/user/metadata"
+            post: "/pt/v1/account/user/metadata"
             body: "*"
             additional_bindings {
-                post: "/ptapi/v1/account/setusermetadata"
+                post: "/pt/v1/account/setusermetadata"
                 body: "*"
             }
         };
     }
 
+    // Set metadata of a role
     rpc SetRoleMetadata (SetRoleMetadataRequest) returns (SetRoleMetadataResponse) {
         option (google.api.http) = {
-            post: "/ptapi/v1/account/role/metadata"
+            post: "/pt/v1/account/role/metadata"
             body: "*"
             additional_bindings {
-                post: "/ptapi/v1/account/setrolemetadata"
+                post: "/pt/v1/account/setrolemetadata"
                 body: "*"
             }
         };
@@ -104,14 +115,23 @@ service Account {
 
 message LoginRequest {
     string app_id = 1;
+    // The login state can be various depending to implementation
     google.protobuf.Any state = 2;
 }
 message LoginResponse {
     // Token will be set to cookie "x-libra-token" as well.
     // A token field should be set to request if cookie is not supported.
-    // Both cookie and field are set, cookie is preferred.
+    // If both cookie and request are set, cookie is preferred.
     string token = 1;
     User user = 2;
+}
+
+message BindRequest {
+    string app_id = 1;
+    string token = 2;
+    string acct_id = 3;
+}
+message BindResponse {
 }
 
 message ListRolesRequest {
