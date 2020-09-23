@@ -15,7 +15,6 @@ import "google/protobuf/any.proto";
 // An instance of user is mapped from tuple(app, acct_type, acct_id).
 message User {
     string id = 1;
-    string acct_type = 2;
     repeated string acct_id  = 4;
     map<string, string> metadata = 15;
 }
@@ -24,6 +23,7 @@ message User {
 // Multiple roles could be created in one app by the same user
 message Role {
     string id = 1;
+    int32 index = 2;
     string user_id = 3;
     map<string, string> metadata = 15;
 }
