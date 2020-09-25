@@ -44,21 +44,33 @@ message RegisterSchemaResponse {
     string schema = 1;
 }
 
+message LockOptions {
+}
+message UnlockOptions {
+    // 即使操作失败，依然释放锁
+    bool unlock_on_failure = 1;
+}
+
 // All methods work around archive, so that all request and response could be the same
 message GetArchiveRequest {
     string  id = 1;
     Archive add_if_not_found = 2;
-    //string  token = 10;
-    bool    with_lock = 11;
+    // 设置lock_options会在获取数据之前尝试获取id对应的互斥锁
+    // 如果上锁失败，数据将不会获取
+    LockOptions lock_options = 11;
 }
 message GetArchiveResponse {
     Archive archive = 1;
-    string  token = 10;
+    // 获取到的互斥锁，你不需要知道这是个什么，在解锁时候传回来就行了
+    google.protobuf.Any lock = 10;
 }
 message SetArchiveRequest {
     Archive archive = 1;
-    string  token = 10;
-    bool    with_unlock = 11;
+    // 获取到的互斥锁，更新数据前会校验锁是否有效，如果锁无效则不会更新数据
+    // 如果不设置，数据则会被强制更新
+    google.protobuf.Any lock = 10;
+    // 设置unlock_options会在操作完成时解锁，要求lock字段有效
+    UnlockOptions unlock_options = 11;
 }
 message SetArchiveResponse {
     Archive archive = 1;
