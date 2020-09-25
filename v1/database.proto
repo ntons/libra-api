@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/descriptor.proto";
+
+// Archive structure
+message Archive {
+    // unique archive id
+    string id = 1;
+    // primary archive payload
+    google.protobuf.Any model = 2;
+    // secondary metadata
+    map<string, google.protobuf.Any> metadata = 3;
+}
+
+service Database {
+    rpc RegisterSchema(RegisterSchemaRequest) returns (RegisterSchemaResponse) {}
+    // lock/unlock archive mutex
+    rpc Lock   (GetArchiveRequest) returns (GetArchiveResponse);
+    rpc Unlock (ArchiveSetRequest) returns (ArchiveSetResponse);
+    // get/set whole archive
+    rpc GetArchive (GetArchiveRequest) returns (GetArchiveResponse);
+    rpc SetArchive (ArchiveSetRequest) returns (ArchiveSetResponse);
+    // get/set archive model
+    rpc GetModel (GetArchiveRequest) returns (GetArchiveResponse);
+    rpc SetModel (ArchiveSetRequest) returns (ArchiveSetResponse);
+    // get/set archive metadata
+    rpc GetMetadata (GetArchiveRequest) returns (GetArchiveResponse);
+    rpc SetMetadata (ArchiveSetRequest) returns (ArchiveSetResponse);
+}
+
+message RegisterSchemaRequest {
+    // proto file descriptor set
+    google.protobuf.FileDescriptorSet descriptor_set = 1;
+    // proto message name
+    string message_name = 2;
+}
+message RegisterSchemaResponse {
+    // unique identifier for registered proto
+    string schema = 1;
+}
+
+// All methods work around archive, so that all request and response could be the same
+message GetArchiveRequest {
+    string  id = 1;
+    Archive add_if_not_found = 2;
+    //string  token = 10;
+    bool    with_lock = 11;
+}
+message GetArchiveResponse {
+    Archive archive = 1;
+    string  token = 10;
+}
+message ArchiveSetRequest {
+    Archive archive = 1;
+    string  token = 10;
+    bool    with_unlock = 11;
+}
+message ArchiveSetResponse {
+    Archive archive = 1;
+}
