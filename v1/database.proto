@@ -21,16 +21,16 @@ service Database {
     rpc RegisterSchema(RegisterSchemaRequest) returns (RegisterSchemaResponse) {}
     // lock/unlock archive mutex
     rpc Lock   (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc Unlock (ArchiveSetRequest) returns (ArchiveSetResponse);
+    rpc Unlock (SetArchiveRequest) returns (SetArchiveResponse);
     // get/set whole archive
     rpc GetArchive (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc SetArchive (ArchiveSetRequest) returns (ArchiveSetResponse);
+    rpc SetArchive (SetArchiveRequest) returns (SetArchiveResponse);
     // get/set archive model
     rpc GetModel (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc SetModel (ArchiveSetRequest) returns (ArchiveSetResponse);
+    rpc SetModel (SetArchiveRequest) returns (SetArchiveResponse);
     // get/set archive metadata
     rpc GetMetadata (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc SetMetadata (ArchiveSetRequest) returns (ArchiveSetResponse);
+    rpc SetMetadata (SetArchiveRequest) returns (SetArchiveResponse);
 }
 
 message RegisterSchemaRequest {
@@ -55,11 +55,11 @@ message GetArchiveResponse {
     Archive archive = 1;
     string  token = 10;
 }
-message ArchiveSetRequest {
+message SetArchiveRequest {
     Archive archive = 1;
     string  token = 10;
     bool    with_unlock = 11;
 }
-message ArchiveSetResponse {
+message SetArchiveResponse {
     Archive archive = 1;
 }
