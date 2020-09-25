@@ -10,10 +10,10 @@ import "google/protobuf/any.proto";
 // 该接口需要校验客户端合法性
 service Access {
     // Establish the push stream
-    rpc SignIn(SignInRequest) returns (stream google.protobuf.Any);
+    rpc Access(AccessRequest) returns (stream google.protobuf.Any);
 }
 
-message SignInRequest {
+message AccessRequest {
 }
 
 // Gateway提供可信域内对Access接入的客户端的操作服务
