@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package libra.sdk.examples.echo;
+
+option go_package = "github.com/ntons/libra-go/api/sdk/examples/echo";
+
+service Echo {
+    rpc Send(SendRequest) returns (SendResponse);
+}
+
+message SendRequest {
+    string content = 1;
+}
+message SendResponse {
+    string content = 2;
+}
+
