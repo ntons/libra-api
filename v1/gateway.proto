@@ -6,33 +6,31 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 
 import "google/protobuf/any.proto";
 
-// Access提供客户端接入服务，签入之后可以获取S->C通信管道
-// 该接口需要校验客户端合法性
-service Access {
-    // Establish the push stream
-    rpc Access(AccessRequest) returns (stream google.protobuf.Any);
-}
-
-message AccessRequest {
-}
-
 // Gateway提供可信域内对Access接入的客户端的操作服务
 service Gateway {
+    // Establish the push stream
+    // Access提供客户端接入服务，签入之后可以获取S->C通信管道
+    // 该接口需要校验客户端合法性
+    rpc Access(GatewayAccessRequest) returns (stream google.protobuf.Any);
+
     // Push message to client
-    rpc Push(PushRequest) returns (PushResponse);
+    rpc Push(GatewayPushRequest) returns (GatewayPushResponse);
     // Subscribe a broadcast channel
-    rpc Subscribe(SubscribeRequest) returns (SubscribeResponse);
+    rpc Subscribe(GatewaySubscribeRequest) returns (GatewaySubscribeResponse);
 }
 
-message PushRequest {
+message GatewayAccessRequest {
+}
+
+message GatewayPushRequest {
     string role_id = 1;
     google.protobuf.Any data = 10;
 }
-message PushResponse {
+message GatewayPushResponse {
 }
 
-message SubscribeRequest {
+message GatewaySubscribeRequest {
 }
-message SubscribeResponse {
+message GatewaySubscribeResponse {
 }
 

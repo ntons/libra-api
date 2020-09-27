@@ -37,94 +37,71 @@ message Role {
 service Account {
     // Login verify the login state, return user and token as passport
     // a user will be created automatically if not exists
-    rpc Login (LoginRequest) returns (LoginResponse) {
+    rpc Login (AccountLoginRequest) returns (AccountLoginResponse) {
         option (google.api.http) = {
-            post: "/v1/account/user"
+            post: "/v1/account/login"
             body: "*"
-            additional_bindings {
-                post: "/v1/account/login"
-                body: "*"
-            }
         };
     }
 
     // Bind another acct_id to user
-    rpc Bind (BindRequest) returns (BindResponse) {
+    rpc Bind (AccountBindRequest) returns (AccountBindResponse) {
         option (google.api.http) = {
-            put: "/v1/account/user"
+            post: "/v1/account/bind"
             body: "*"
-            additional_bindings {
-                post: "/v1/account/bind"
-                body: "*"
-            }
         };
     }
 
     // List roles which belonging to the user
-    rpc ListRoles (ListRolesRequest) returns (ListRolesResponse) {
+    rpc ListRoles (AccountListRolesRequest) returns (AccountListRolesResponse) {
         option (google.api.http) = {
-            get:  "/v1/account/role"
+            post: "/v1/account/list-role"
+            body: "*"
             additional_bindings {
-                get: "/v1/account/listroles"
+                get: "/v1/account/list-roles"
             }
         };
     }
 
     // Create role to the user
-    rpc CreateRole (CreateRoleRequest) returns (CreateRoleResponse) {
+    rpc CreateRole (AccountCreateRoleRequest) returns (AccountCreateRoleResponse) {
         option (google.api.http) = {
-            put:  "/v1/account/role"
+            post: "/v1/account/create-role"
             body: "*"
-            additional_bindings {
-                post: "/v1/account/createrole"
-                body: "*"
-            }
         };
     }
 
     // Sign in the role, get a ticket as passport
-    rpc SignIn (SignInRequest) returns (SignInResponse) {
+    rpc SignIn (AccountSignInRequest) returns (AccountSignInResponse) {
         option (google.api.http) = {
-            post: "/v1/account/role"
+            post: "/v1/account/sign-in"
             body: "*"
-            additional_bindings {
-                post: "/v1/account/signin"
-                body: "*"
-            }
         };
     }
 
     // Set metadata of the user
-    rpc SetUserMetadata (SetUserMetadataRequest) returns (SetUserMetadataResponse) {
+    rpc SetUserMetadata (AccountSetUserMetadataRequest) returns (AccountSetUserMetadataResponse) {
         option (google.api.http) = {
-            post: "/v1/account/user/metadata"
+            post: "/v1/account/set-user-metadata"
             body: "*"
-            additional_bindings {
-                post: "/v1/account/setusermetadata"
-                body: "*"
-            }
         };
     }
 
     // Set metadata of a role
-    rpc SetRoleMetadata (SetRoleMetadataRequest) returns (SetRoleMetadataResponse) {
+    rpc SetRoleMetadata (AccountSetRoleMetadataRequest) returns (AccountSetRoleMetadataResponse) {
         option (google.api.http) = {
-            post: "/v1/account/role/metadata"
+            post: "/v1/account/set-role-metadata"
             body: "*"
-            additional_bindings {
-                post: "/v1/account/setrolemetadata"
-                body: "*"
-            }
         };
     }
 }
 
-message LoginRequest {
+message AccountLoginRequest {
     string app_id = 1;
     // The login state can be various depending to implementation
     google.protobuf.Any state = 2;
 }
-message LoginResponse {
+message AccountLoginResponse {
     // Token will be set to cookie "x-libra-token" as well.
     // A token field should be set to request if cookie is not supported.
     // If both cookie and request are set, cookie is preferred.
@@ -132,54 +109,54 @@ message LoginResponse {
     User user = 2;
 }
 
-message BindRequest {
+message AccountBindRequest {
     string app_id = 1;
     string token = 2;
     string acct_id = 3;
 }
-message BindResponse {
+message AccountBindResponse {
 }
 
-message ListRolesRequest {
+message AccountListRolesRequest {
     string app_id = 1;
     string token = 2;
 }
-message ListRolesResponse {
+message AccountListRolesResponse {
     repeated Role roles = 1;
 }
 
-message CreateRoleRequest {
+message AccountCreateRoleRequest {
     string app_id = 1;
     string token = 2;
     int32 index = 3; // role index to prevent duplicate creation
 }
-message CreateRoleResponse {
+message AccountCreateRoleResponse {
     Role role = 1;
 }
 
-message SignInRequest {
+message AccountSignInRequest {
     string app_id = 1;
     string token = 2;
     string role_id = 3;
 }
-message SignInResponse {
+message AccountSignInResponse {
     string ticket = 1;
     Role role = 2;
 }
 
-message SetUserMetadataRequest {
+message AccountSetUserMetadataRequest {
     string app_id = 1;
     string token = 2;
     map<string, string> metadata = 3;
 }
-message SetUserMetadataResponse {
+message AccountSetUserMetadataResponse {
 }
 
-message SetRoleMetadataRequest {
+message AccountSetRoleMetadataRequest {
     string app_id = 1;
     string token = 2;
     string role_id = 3;
     map<string, string> metadata = 4;
 }
-message SetRoleMetadataResponse {
+message AccountSetRoleMetadataResponse {
 }

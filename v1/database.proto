@@ -7,39 +7,26 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
-// Archive structure
-message Archive {
-    // unique archive id
-    string id = 1;
-    // primary archive payload
-    google.protobuf.Any model = 2;
-    // secondary metadata
-    map<string, google.protobuf.Any> metadata = 3;
-}
-
+// 数据存取接口
+// 这里的锁是个乐观锁，可以完全不用加锁任意访问数据
+// 但是如果存在竞争条件(race condition)，使用者保证正确加锁
 service Database {
-    rpc RegisterSchema(RegisterSchemaRequest) returns (RegisterSchemaResponse) {}
-    // lock/unlock archive mutex
-    rpc Lock   (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc Unlock (SetArchiveRequest) returns (SetArchiveResponse);
-    // get/set whole archive
-    rpc GetArchive (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc SetArchive (SetArchiveRequest) returns (SetArchiveResponse);
-    // get/set archive model
-    rpc GetModel (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc SetModel (SetArchiveRequest) returns (SetArchiveResponse);
-    // get/set archive metadata
-    rpc GetMetadata (GetArchiveRequest) returns (GetArchiveResponse);
-    rpc SetMetadata (SetArchiveRequest) returns (SetArchiveResponse);
+    rpc RegisterSchema(DatabaseRegisterSchemaRequest) returns (DatabaseRegisterSchemaResponse) {}
+    // lock/unlock
+    rpc Lock   (DatabaseLockRequest) returns (DatabaseLockResponse);
+    rpc Unlock (DatabaseUnlockRequest) returns (DatabaseUnlockResponse);
+    // get/set data
+    rpc Get (DatabaseGetRequest) returns (DatabaseGetResponse);
+    rpc Set (DatabaseSetRequest) returns (DatabaseSetResponse);
 }
 
-message RegisterSchemaRequest {
+message DatabaseRegisterSchemaRequest {
     // proto file descriptor set
     google.protobuf.FileDescriptorSet descriptor_set = 1;
     // proto message name
     string message_name = 2;
 }
-message RegisterSchemaResponse {
+message DatabaseRegisterSchemaResponse {
     // unique identifier for registered proto
     string schema = 1;
 }
@@ -48,30 +35,51 @@ message LockOptions {
 }
 message UnlockOptions {
     // 即使操作失败，依然释放锁
-    bool unlock_on_failure = 1;
+    bool even_on_failure = 1;
 }
 
-// All methods work around archive, so that all request and response could be the same
-message GetArchiveRequest {
-    string  id = 1;
-    Archive add_if_not_found = 2;
-    // 设置lock_options会在获取数据之前尝试获取id对应的互斥锁
-    // 如果上锁失败，数据将不会获取
+message DatabaseLockRequest {
+    string app_id = 1;
+    string collection = 2;
+    string id = 3;
     LockOptions lock_options = 11;
 }
-message GetArchiveResponse {
-    Archive archive = 1;
+message DatabaseLockResponse {
     // 获取到的互斥锁，你不需要知道这是个什么，在解锁时候传回来就行了
     google.protobuf.Any lock = 10;
 }
-message SetArchiveRequest {
-    Archive archive = 1;
+
+message DatabaseUnlockRequest {
+    google.protobuf.Any lock = 10;
+    UnlockOptions unlock_options = 11;
+}
+message DatabaseUnlockResponse {
+}
+
+message DatabaseGetRequest {
+    string app_id = 1;
+    string collection = 2;
+    string id = 3;
+    google.protobuf.Any add_if_not_found = 9;
+    // 如果设置lock_options会在获取数据之前尝试获取id对应的互斥锁
+    // 如果上锁失败，数据将不会获取
+    LockOptions lock_options = 11;
+}
+message DatabaseGetResponse {
+    google.protobuf.Any data = 9;
+    google.protobuf.Any lock = 10;
+}
+
+message DatabaseSetRequest {
+    string app_id = 1;
+    string collection = 2;
+    string id = 3;
+    google.protobuf.Any data = 9;
     // 获取到的互斥锁，更新数据前会校验锁是否有效，如果锁无效则不会更新数据
     // 如果不设置，数据则会被强制更新
     google.protobuf.Any lock = 10;
-    // 设置unlock_options会在操作完成时解锁，要求lock字段有效
+    // 如果设置unlock_options会在操作完成时解锁，要求lock字段有效
     UnlockOptions unlock_options = 11;
 }
-message SetArchiveResponse {
-    Archive archive = 1;
+message DatabaseSetResponse {
 }
