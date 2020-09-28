@@ -7,6 +7,8 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
+import "v1/entity.proto";
+
 service Sync {
     // lock/unlock
     rpc Lock   (SyncLockRequest) returns (SyncLockResponse);
@@ -21,9 +23,7 @@ message SyncUnlockOptions {
 }
 
 message SyncLockRequest {
-    string app_id = 1;
-    string collection = 2;
-    string id = 3;
+    EntityKey key = 1;
     SyncLockOptions lock_options = 11;
 }
 message SyncLockResponse {

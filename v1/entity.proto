@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+// EntityKey 代表一个抽象实体的唯一标识
+message EntityKey {
+    string app_id       = 1;
+    string collection   = 2;
+    string id           = 3;
+}
