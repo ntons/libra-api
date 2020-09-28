@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/descriptor.proto";
+
+service Sync {
+    // lock/unlock
+    rpc Lock   (SyncLockRequest) returns (SyncLockResponse);
+    rpc Unlock (SyncUnlockRequest) returns (SyncUnlockResponse);
+}
+
+message SyncLockOptions {
+}
+message SyncUnlockOptions {
+    // 即使操作失败，依然释放锁
+    bool even_on_failure = 1;
+}
+
+message SyncLockRequest {
+    string app_id = 1;
+    string collection = 2;
+    string id = 3;
+    SyncLockOptions lock_options = 11;
+}
+message SyncLockResponse {
+    // 获取到的互斥锁，你不需要知道这是个什么，在解锁时候传回来就行了
+    google.protobuf.Any lock = 10;
+}
+
+message SyncUnlockRequest {
+    google.protobuf.Any lock = 10;
+    SyncUnlockOptions unlock_options = 11;
+}
+message SyncUnlockResponse {
+}
+
+

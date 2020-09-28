@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "v1/chart.proto";
+
+service Bubble {
+    // append entries to the end of chart
+    rpc Append(BubbleAppendRequest) returns(BubbleAppendResponse);
+    // swap 2 entries by id
+    rpc SwapById(BubbleSwapByIdRequest) returns(BubbleSwapByIdResponse);
+    // swap 2 entries by rank
+    rpc SwapByRank(BubbleSwapByRankRequest) returns(BubbleSwapByRankResponse);
+    // get entries by range
+    rpc GetRange(BubbleGetRangeRequest) returns(BubbleGetRangeResponse);
+    // get entries by id
+    rpc GetById(BubbleGetByIdRequest) returns(BubbleGetByIdResponse);
+    // remove entries by id
+    rpc RemoveById(BubbleRemoveByIdRequest) returns(BubbleRemoveByIdResponse);
+    // set entry info by id
+    rpc SetInfo(BubbleSetInfoRequest) returns(BubbleSetInfoResponse);
+}
+
+message BubbleAppendRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleAppendResponse {
+}
+
+message BubbleSwapByIdRequest {
+    string id0 = 1;
+    string id1 = 2;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleSwapByIdResponse {
+}
+
+message BubbleSwapByRankRequest {
+    int32 rank0 = 1;
+    int32 rank1 = 2;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleSwapByRankResponse {
+}
+
+message BubbleGetRangeRequest {
+    int32 offset = 1;
+    int32 count = 2;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleGetRangeResponse {
+    repeated ChartEntry entries = 1;
+}
+
+message BubbleGetByIdRequest {
+    repeated string ids = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleGetByIdResponse {
+    repeated ChartEntry entries = 1;
+}
+
+message BubbleRemoveByIdRequest {
+    repeated string ids = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleRemoveByIdResponse {
+}
+
+message BubbleSetInfoRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message BubbleSetInfoResponse {
+}
