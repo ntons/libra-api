@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "v1/entity.proto";
+
+service Mailing {
+    rpc List (MailingListRequest) returns (MailingListResponse);
+    rpc Push (MailingPushRequest) returns (MailingPushResponse);
+    rpc Pull (MailingPullRequest) returns (MailingPullResponse);
+}
+
+message Mail {
+    string id       = 1;
+    string content  = 2;
+}
+
+message MailingListRequest {
+    EntityKey key = 1;
+}
+message MailingListResponse {
+    repeated Mail mails = 1;
+}
+
+message MailingPushRequest {
+    EntityKey key = 1;
+    string content = 2;
+    int32 capacity = 3; // maximum mails to keep
+}
+message MailingPushResponse {
+    string mail_id = 1;
+}
+
+message MailingPullRequest {
+    EntityKey key = 1;
+    repeated string ids = 2;
+}
+message MailingPullResponse {
+    repeated string pulled_ids = 1; // pulled id list
+}
+
