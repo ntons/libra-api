@@ -6,7 +6,7 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 
 import "google/protobuf/any.proto";
 
-// Gateway提供可信域内对Access接入的客户端的操作服务
+// Gateway网关服务是有状态的，需要metadata: x-libra-role-id 
 service Gateway {
     // Establish the push stream
     // Access提供客户端接入服务，签入之后可以获取S->C通信管道
@@ -17,20 +17,35 @@ service Gateway {
     rpc Push(GatewayPushRequest) returns (GatewayPushResponse);
     // Subscribe a broadcast channel
     rpc Subscribe(GatewaySubscribeRequest) returns (GatewaySubscribeResponse);
+    rpc Unsubscribe(GatewayUnsubscribeRequest) returns (GatewayUnsubscribeResponse);
+    // Broadcast to a channel
+    rpc Broadcast(GatewayBroadcastRequest) returns (GatewayBroadcastResponse);
 }
 
 message GatewayAccessRequest {
 }
 
 message GatewayPushRequest {
-    string role_id = 1;
     google.protobuf.Any data = 10;
 }
 message GatewayPushResponse {
 }
 
 message GatewaySubscribeRequest {
+    repeated string keys = 1;
 }
 message GatewaySubscribeResponse {
 }
 
+message GatewayUnsubscribeRequest {
+    repeated string keys = 1;
+}
+message GatewayUnsubscribeResponse {
+}
+
+message GatewayBroadcastRequest {
+    string key = 1;
+    google.protobuf.Any data = 2;
+}
+message GatewayBroadcastResponse {
+}
