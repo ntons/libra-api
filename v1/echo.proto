@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "google/api/annotations.proto";
+
+// Echo没有实际意义，主要为了验证系统有效性
+service Echo {
+    // unary echo
+    rpc Echo(EchoRequest) returns(EchoResponse) {
+        option (google.api.http) = {
+            post: "/v1/echo/echo"
+            body: "*"
+        };
+    }
+
+    // streaming echo
+    rpc Repeat(EchoRepeatRequest) returns(stream EchoRepeatResponse) {
+        option (google.api.http) = {
+            post: "/v1/echo/repeat"
+            body: "*"
+        };
+    }
+}
+
+message EchoRequest {
+    string content = 1;
+}
+message EchoResponse {
+    string content = 1;
+}
+
+message EchoRepeatRequest {
+    string content = 1;
+    int32 interval = 2;
+    int32 count = 3;
+}
+message EchoRepeatResponse {
+    string content = 1;
+    int32 seq = 2;
+}

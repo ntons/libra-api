@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+
+// All requests require passport `x-libra-token`, but `Login`
+service User {
+    // A x-libra-token will be replied by grpc-metadata/http-cookie
+    rpc Login(UserLoginRequest) returns(UserLoginResponse) {
+        option (google.api.http) = {
+            post: "/v1/user/login"
+            body: "*"
+        };
+    }
+
+    rpc Logout(UserLogoutRequest) returns(UserLogoutResponse) {
+        option (google.api.http) = {
+            post: "/v1/user/logout"
+            body: "*"
+        };
+    }
+
+    rpc Bind(UserBindRequest) returns(UserBindResponse) {
+        option (google.api.http) = {
+            post: "/v1/user/bind"
+            body: "*"
+        };
+    }
+
+    rpc SetMetadata(UserSetMetadataRequest) returns(UserSetMetadataResponse) {
+        option (google.api.http) = {
+            post: "/v1/user/set-metadata"
+            body: "*"
+        };
+    }
+}
+
+message UserData {
+    string id = 1;
+    repeated string acct_id  = 4;
+    map<string, string> metadata = 15;
+}
+
+message UserLoginRequest {
+    string app_id = 1;
+    google.protobuf.Any state = 2; // depending on implementation
+}
+message UserLoginResponse {
+    UserData user = 1;
+}
+
+message UserLogoutRequest {
+}
+message UserLogoutResponse {
+}
+
+message UserBindRequest {
+    string acct_id = 1;
+}
+message UserBindResponse {
+}
+
+message UserSetMetadataRequest {
+    map<string, string> metadata = 1;
+}
+message UserSetMetadataResponse {
+}
+
+// login state for development, no security mechanism required
+message DevLoginState {
+    string username = 1;
+}
+
+// Librad not implement any account (check) system, the real account state
+// should be verified via a third-party server, then send a login request
+// to librad to fetch passport(token).
+message UniformLoginState {
+    // User which matchs one of the acct_id will be selected,
+    // then all of the acct_id will be bind to this user.
+    repeated string acct_id = 1;
+
+    // random string max length to 32 bytes
+    // 16 bytes length at least is recommended
+    string nonce = 14;
+
+    // the signature should be signed at SERVER SIDE,
+    // no matter the login request is sent from client or server.
+    string signature = 15;
+}

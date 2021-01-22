@@ -8,44 +8,51 @@ import "google/protobuf/any.proto";
 
 // Gateway网关服务是有状态的，需要metadata: x-libra-role-id 
 service Gateway {
-    // Establish the push stream
-    // Access提供客户端接入服务，签入之后可以获取S->C通信管道
-    // 该接口需要校验客户端合法性
-    rpc Access(GatewayAccessRequest) returns (stream google.protobuf.Any);
+    ////////////////////////////////////////////////////////////////////////////
+    // Methods access from client side
+    ////////////////////////////////////////////////////////////////////////////
 
-    // Push message to client
-    rpc Push(GatewayPushRequest) returns (GatewayPushResponse);
-    // Subscribe a broadcast channel
-    rpc Subscribe(GatewaySubscribeRequest) returns (GatewaySubscribeResponse);
-    rpc Unsubscribe(GatewayUnsubscribeRequest) returns (GatewayUnsubscribeResponse);
+    // Establish the back pushing stream
+    // Which method name is better ????
+    rpc Connect(GatewayConnectRequest) returns(stream google.protobuf.Any);
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Methods access from server side
+    ////////////////////////////////////////////////////////////////////////////
+
+    // Send message to client
+    rpc Send(GatewaySendRequest) returns(GatewaySendResponse);
+
+    // Let a certain client to subscribe broadcast channels
+    rpc Subscribe(GatewaySubscribeRequest) returns(GatewaySubscribeResponse);
+    // let a certain client to unsubscribe broadcast channels
+    rpc Unsubscribe(GatewayUnsubscribeRequest) returns(GatewayUnsubscribeResponse);
+
     // Broadcast to a channel
-    rpc Broadcast(GatewayBroadcastRequest) returns (GatewayBroadcastResponse);
+    rpc Broadcast(GatewayBroadcastRequest) returns(GatewayBroadcastResponse);
 }
 
-message GatewayAccessRequest {
-}
+message GatewayConnectRequest {}
 
-message GatewayPushRequest {
+message GatewaySendRequest {
     google.protobuf.Any data = 10;
 }
-message GatewayPushResponse {
-}
+message GatewaySendResponse {}
 
 message GatewaySubscribeRequest {
     repeated string keys = 1;
 }
-message GatewaySubscribeResponse {
-}
+message GatewaySubscribeResponse {}
 
 message GatewayUnsubscribeRequest {
     repeated string keys = 1;
 }
-message GatewayUnsubscribeResponse {
-}
+message GatewayUnsubscribeResponse {}
 
 message GatewayBroadcastRequest {
     string key = 1;
     google.protobuf.Any data = 2;
 }
-message GatewayBroadcastResponse {
-}
+message GatewayBroadcastResponse {}
+
+
