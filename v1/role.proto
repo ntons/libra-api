@@ -15,6 +15,7 @@ import "google/api/annotations.proto";
 
 // All requests require passport `x-libra-token`
 service Role {
+    // list all roles belonging to user
     rpc List(RoleListRequest) returns(RoleListResponse) {
         option(google.api.http) = {
             post: "/v1/role/list"
@@ -22,6 +23,7 @@ service Role {
         };
     }
 
+    // create a new role
     rpc Create(RoleCreateRequest) returns(RoleCreateResponse) {
         option(google.api.http) = {
             post: "/v1/role/create"
@@ -29,6 +31,7 @@ service Role {
         };
     }
 
+    // set metadata to role
     rpc SetMetadata(RoleSetMetadataRequest) returns(RoleSetMetadataResponse) {
         option(google.api.http) = {
             post: "/v1/role/set-metadata"
@@ -36,7 +39,7 @@ service Role {
         };
     }
 
-    // A x-libra-ticket will be replied by grpc-metadata/http-cookie
+    // a `x-libra-ticket` used to identify a role will be replied via metadata/cookie
     rpc SignIn(RoleSignInRequest) returns(RoleSignInResponse) {
         option(google.api.http) = {
             post: "/v1/role/sign-in"

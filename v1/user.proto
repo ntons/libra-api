@@ -9,7 +9,7 @@ import "google/protobuf/any.proto";
 
 // All requests require passport `x-libra-token`, but `Login`
 service User {
-    // A x-libra-token will be replied by grpc-metadata/http-cookie
+    // A `x-libra-token` used to identify a user will be replied via metadata/cookie
     rpc Login(UserLoginRequest) returns(UserLoginResponse) {
         option (google.api.http) = {
             post: "/v1/user/login"
@@ -17,6 +17,7 @@ service User {
         };
     }
 
+    // logout invalidate x-libra-token
     rpc Logout(UserLogoutRequest) returns(UserLogoutResponse) {
         option (google.api.http) = {
             post: "/v1/user/logout"
@@ -24,6 +25,7 @@ service User {
         };
     }
 
+    // bind an account to user
     rpc Bind(UserBindRequest) returns(UserBindResponse) {
         option (google.api.http) = {
             post: "/v1/user/bind"
@@ -31,6 +33,7 @@ service User {
         };
     }
 
+    // set metadata to user
     rpc SetMetadata(UserSetMetadataRequest) returns(UserSetMetadataResponse) {
         option (google.api.http) = {
             post: "/v1/user/set-metadata"

@@ -11,15 +11,12 @@ service Gateway {
     ////////////////////////////////////////////////////////////////////////////
     // Methods access from client side
     ////////////////////////////////////////////////////////////////////////////
-
     // Establish the back pushing stream
-    // Which method name is better ????
     rpc Connect(GatewayConnectRequest) returns(stream google.protobuf.Any);
 
     ////////////////////////////////////////////////////////////////////////////
     // Methods access from server side
     ////////////////////////////////////////////////////////////////////////////
-
     // Send message to client
     rpc Send(GatewaySendRequest) returns(GatewaySendResponse);
 
@@ -54,5 +51,4 @@ message GatewayBroadcastRequest {
     google.protobuf.Any data = 2;
 }
 message GatewayBroadcastResponse {}
-
 

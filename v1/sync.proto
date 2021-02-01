@@ -38,4 +38,3 @@ message SyncUnlockRequest {
 message SyncUnlockResponse {
 }
 
-
