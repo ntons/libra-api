@@ -7,18 +7,22 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
-import "v1/entity.proto";
 import "v1/sync.proto";
 
-// 数据存取接口
+// 数据存储服务
 // 这里的锁是个乐观锁，可以完全不用加锁任意访问数据
 // 但是如果存在竞争条件(race condition)，使用者保证正确加锁
 service Database {
     rpc RegisterSchema(DatabaseRegisterSchemaRequest) returns (DatabaseRegisterSchemaResponse) {}
+    rpc Get(DatabaseGetRequest) returns(DatabaseGetResponse);
+    rpc Set(DatabaseSetRequest) returns(DatabaseSetResponse);
+}
 
-    // get/set data
-    rpc Get (DatabaseGetRequest) returns (DatabaseGetResponse);
-    rpc Set (DatabaseSetRequest) returns (DatabaseSetResponse);
+// 邮件服务，异步通信体系
+service Mailbox {
+    rpc List(MailboxListRequest) returns(MailboxListResponse);
+    rpc Push(MailboxPushRequest) returns(MailboxPushResponse);
+    rpc Pull(MailboxPullRequest) returns(MailboxPullResponse);
 }
 
 message DatabaseRegisterSchemaRequest {
@@ -55,3 +59,33 @@ message DatabaseSetRequest {
 }
 message DatabaseSetResponse {
 }
+
+message Mail {
+    string id       = 1;
+    string content  = 2;
+}
+
+message MailboxListRequest {
+    EntityKey key = 1;
+}
+message MailboxListResponse {
+    repeated Mail mails = 1;
+}
+
+message MailboxPushRequest {
+    EntityKey key = 1;
+    string content = 2;
+    int32 capacity = 3; // maximum mails to keep
+}
+message MailboxPushResponse {
+    string mail_id = 1;
+}
+
+message MailboxPullRequest {
+    EntityKey key = 1;
+    repeated string ids = 2;
+}
+message MailboxPullResponse {
+    repeated string pulled_ids = 1; // pulled id list
+}
+

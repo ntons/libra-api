@@ -6,7 +6,7 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 
 import "google/protobuf/any.proto";
 
-// Gateway网关服务是有状态的，需要metadata: x-libra-role-id 
+// 网关系统，需要角色登录状态，为无状态服务提供服务端push能力
 service Gateway {
     ////////////////////////////////////////////////////////////////////////////
     // Methods access from client side

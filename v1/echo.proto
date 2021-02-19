@@ -6,7 +6,7 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 
 import "google/api/annotations.proto";
 
-// Echo没有实际意义，主要为了验证系统有效性
+// 验证系统有效性验证服务
 service Echo {
     // unary echo
     rpc Echo(EchoRequest) returns(EchoResponse) {
@@ -15,7 +15,6 @@ service Echo {
             body: "*"
         };
     }
-
     // streaming echo
     rpc Repeat(EchoRepeatRequest) returns(stream EchoRepeatResponse) {
         option (google.api.http) = {
