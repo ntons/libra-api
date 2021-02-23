@@ -7,22 +7,16 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
-import "v1/sync.proto";
+import "v1/entrykey.proto";
+import "v1/distlock.proto";
 
 // 数据存储服务
 // 这里的锁是个乐观锁，可以完全不用加锁任意访问数据
 // 但是如果存在竞争条件(race condition)，使用者保证正确加锁
 service Database {
-    rpc RegisterSchema(DatabaseRegisterSchemaRequest) returns (DatabaseRegisterSchemaResponse) {}
+    rpc RegisterSchema(DatabaseRegisterSchemaRequest)returns (DatabaseRegisterSchemaResponse) {}
     rpc Get(DatabaseGetRequest) returns(DatabaseGetResponse);
     rpc Set(DatabaseSetRequest) returns(DatabaseSetResponse);
-}
-
-// 邮件服务，异步通信体系
-service Mailbox {
-    rpc List(MailboxListRequest) returns(MailboxListResponse);
-    rpc Push(MailboxPushRequest) returns(MailboxPushResponse);
-    rpc Pull(MailboxPullRequest) returns(MailboxPullResponse);
 }
 
 message DatabaseRegisterSchemaRequest {
@@ -37,11 +31,11 @@ message DatabaseRegisterSchemaResponse {
 }
 
 message DatabaseGetRequest {
-    EntityKey key = 1;
+    EntryKey key = 1;
     google.protobuf.Any add_if_not_found = 9;
     // 如果设置lock_options会在获取数据之前尝试获取id对应的互斥锁
     // 如果上锁失败，数据将不会获取
-    SyncLockOptions lock_options = 11;
+    DistlockLockOptions lock_options = 11;
 }
 message DatabaseGetResponse {
     google.protobuf.Any data = 9;
@@ -49,43 +43,14 @@ message DatabaseGetResponse {
 }
 
 message DatabaseSetRequest {
-    EntityKey key = 1;
+    EntryKey key = 1;
     google.protobuf.Any data = 9;
     // 获取到的互斥锁，更新数据前会校验锁是否有效，如果锁无效则不会更新数据
     // 如果不设置，数据则会被强制更新
     google.protobuf.Any lock = 10;
     // 如果设置unlock_options会在操作完成时解锁，要求lock字段有效
-    SyncUnlockOptions unlock_options = 11;
+    DistlockUnlockOptions unlock_options = 11;
 }
 message DatabaseSetResponse {
-}
-
-message Mail {
-    string id       = 1;
-    string content  = 2;
-}
-
-message MailboxListRequest {
-    EntityKey key = 1;
-}
-message MailboxListResponse {
-    repeated Mail mails = 1;
-}
-
-message MailboxPushRequest {
-    EntityKey key = 1;
-    string content = 2;
-    int32 capacity = 3; // maximum mails to keep
-}
-message MailboxPushResponse {
-    string mail_id = 1;
-}
-
-message MailboxPullRequest {
-    EntityKey key = 1;
-    repeated string ids = 2;
-}
-message MailboxPullResponse {
-    repeated string pulled_ids = 1; // pulled id list
 }
 

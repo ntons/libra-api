@@ -16,12 +16,7 @@ service Echo {
         };
     }
     // streaming echo
-    rpc Repeat(EchoRepeatRequest) returns(stream EchoRepeatResponse) {
-        option (google.api.http) = {
-            post: "/v1/echo/repeat"
-            body: "*"
-        };
-    }
+    rpc Repeat(EchoRepeatRequest) returns(stream EchoRepeatResponse);
 }
 
 message EchoRequest {

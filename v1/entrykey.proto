@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+// used to locate a data entry
+message EntryKey {
+    string kind = 1; // data category used to store respectively
+    string id   = 2; // must be unique in the same kind
+}

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "v1/entrykey.proto";
+
+// 邮件服务，异步通信体系
+service Mailbox {
+    rpc List(MailboxListRequest) returns(MailboxListResponse);
+    rpc Push(MailboxPushRequest) returns(MailboxPushResponse);
+    rpc Pull(MailboxPullRequest) returns(MailboxPullResponse);
+}
+
+message Mail {
+    string id       = 1;
+    string content  = 2;
+}
+
+message MailboxListRequest {
+    EntryKey key = 1;
+}
+message MailboxListResponse {
+    repeated Mail mails = 1;
+}
+
+message MailboxPushRequest {
+    EntryKey key = 1;
+    string content = 2;
+    int32 capacity = 3; // maximum mails to keep
+}
+message MailboxPushResponse {
+    string mail_id = 1;
+}
+
+message MailboxPullRequest {
+    EntryKey key = 1;
+    repeated string ids = 2;
+}
+message MailboxPullResponse {
+    repeated string pulled_ids = 1; // pulled id list
+}
+

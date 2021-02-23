@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/v1";
+
+import "v1/chart.proto";
+
+// 标准排行榜，按指定权重由大到小排列元素
+service Leaderboard {
+    // set entry score by id
+    // set entry info if info field not empty
+    rpc SetScore(LeaderboardSetScoreRequest) returns(LeaderboardSetScoreResponse);
+    // incr entry score by id, if id not exists, add it with score
+    // set entry info if info filed not empty
+    rpc IncrScore(LeaderboardIncrScoreRequest) returns(LeaderboardIncrScoreResponse);
+    // get entries by range
+    rpc GetRange(LeaderboardGetRangeRequest) returns(LeaderboardGetRangeResponse);
+    // get entries by id
+    rpc GetById(LeaderboardGetByIdRequest) returns(LeaderboardGetByIdResponse);
+    // remove entries by id
+    rpc RemoveById(LeaderboardRemoveByIdRequest) returns(LeaderboardRemoveByIdResponse);
+    // set entry info by id
+    rpc SetInfo(LeaderboardSetInfoRequest) returns(LeaderboardSetInfoResponse);
+}
+
+message LeaderboardSetScoreRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardSetScoreResponse {
+}
+
+message LeaderboardIncrScoreRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardIncrScoreResponse {
+    repeated ChartEntry entries = 2;
+}
+
+message LeaderboardGetRangeRequest {
+    int32 offset = 1;
+    int32 count = 2;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardGetRangeResponse {
+    repeated ChartEntry entries = 1;
+}
+
+message LeaderboardGetByIdRequest {
+    repeated string ids = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardGetByIdResponse {
+    repeated ChartEntry entries = 1;
+}
+
+message LeaderboardRemoveByIdRequest {
+    repeated string ids = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardRemoveByIdResponse {
+}
+
+message LeaderboardSetInfoRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardSetInfoResponse {
+}
+
