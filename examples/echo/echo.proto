@@ -1,21 +1,12 @@
 syntax = "proto3";
 
-package libra.v1;
+package examples.echo;
 
-option go_package = "github.com/ntons/libra-go/api/v1";
-
-import "google/api/annotations.proto";
+option go_package = "github.com/ntons/libra-go/api/examples/echo";
 
 // 验证系统有效性验证服务
 service Echo {
-    // unary echo
-    rpc Echo(EchoRequest) returns(EchoResponse) {
-        option (google.api.http) = {
-            post: "/v1/echo/echo"
-            body: "*"
-        };
-    }
-    // streaming echo
+    rpc Echo(EchoRequest) returns(EchoResponse);
     rpc Repeat(EchoRepeatRequest) returns(stream EchoRepeatResponse);
 }
 
