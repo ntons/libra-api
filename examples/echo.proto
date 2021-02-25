@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package examples.echo;
+package libra.examples;
 
 option go_package = "github.com/ntons/libra-go/api/examples/echo";
 
