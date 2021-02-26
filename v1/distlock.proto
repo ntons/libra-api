@@ -25,11 +25,11 @@ message DistlockLockRequest {
 }
 message DistlockLockResponse {
     // 获取到的互斥锁，你不需要知道这是个什么，在解锁时候传回来就行了
-    google.protobuf.Any lock = 10;
+    google.protobuf.Any lock_token = 10;
 }
 
 message DistlockUnlockRequest {
-    google.protobuf.Any lock = 10;
+    google.protobuf.Any lock_token = 10;
     DistlockUnlockOptions unlock_options = 11;
 }
 message DistlockUnlockResponse {

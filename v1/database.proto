@@ -14,7 +14,7 @@ import "v1/distlock.proto";
 // 这里的锁是个乐观锁，可以完全不用加锁任意访问数据
 // 但是如果存在竞争条件(race condition)，使用者保证正确加锁
 service Database {
-    rpc RegisterSchema(DatabaseRegisterSchemaRequest)returns (DatabaseRegisterSchemaResponse) {}
+    rpc RegisterSchema(DatabaseRegisterSchemaRequest) returns(DatabaseRegisterSchemaResponse) {}
     rpc Get(DatabaseGetRequest) returns(DatabaseGetResponse);
     rpc Set(DatabaseSetRequest) returns(DatabaseSetResponse);
 }
@@ -38,8 +38,9 @@ message DatabaseGetRequest {
     DistlockLockOptions lock_options = 11;
 }
 message DatabaseGetResponse {
+    int64 revision = 8; // data revision
     google.protobuf.Any data = 9;
-    google.protobuf.Any lock = 10;
+    google.protobuf.Any lock_token = 10;
 }
 
 message DatabaseSetRequest {
@@ -47,10 +48,11 @@ message DatabaseSetRequest {
     google.protobuf.Any data = 9;
     // 获取到的互斥锁，更新数据前会校验锁是否有效，如果锁无效则不会更新数据
     // 如果不设置，数据则会被强制更新
-    google.protobuf.Any lock = 10;
-    // 如果设置unlock_options会在操作完成时解锁，要求lock字段有效
+    google.protobuf.Any lock_token = 10;
+    // 如果设置unlock_options会在操作完成时解锁，要求lock_token有效
     DistlockUnlockOptions unlock_options = 11;
 }
 message DatabaseSetResponse {
+    int64 revision = 8; // data revision after setting
 }
 
