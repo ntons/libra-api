@@ -4,6 +4,8 @@ package libra.v1;
 
 option go_package = "github.com/ntons/libra-go/api/v1";
 
+import "google/protobuf/any.proto";
+
 import "v1/entrykey.proto";
 
 // 邮件服务，异步通信体系
@@ -14,8 +16,8 @@ service Mailbox {
 }
 
 message Mail {
-    string id       = 1;
-    string content  = 2;
+    string              id   = 1;
+    google.protobuf.Any data = 2;
 }
 
 message MailboxListRequest {
@@ -27,11 +29,11 @@ message MailboxListResponse {
 
 message MailboxPushRequest {
     EntryKey key = 1;
-    string content = 2;
+    google.protobuf.Any data = 2;
     int32 capacity = 3; // maximum mails to keep
 }
 message MailboxPushResponse {
-    string mail_id = 1;
+    string id = 1;
 }
 
 message MailboxPullRequest {

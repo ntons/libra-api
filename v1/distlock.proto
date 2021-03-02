@@ -6,6 +6,8 @@ option go_package = "github.com/ntons/libra-go/api/v1";
 
 import "google/protobuf/any.proto";
 
+import "v1/entrykey.proto";
+
 // 分布式同步(锁)服务
 service Distlock {
     rpc Lock(DistlockLockRequest) returns(DistlockLockResponse);
@@ -20,7 +22,8 @@ message DistlockUnlockOptions {
 }
 
 message DistlockLockRequest {
-    string key = 1;
+    EntryKey key = 1;
+    // 如果需要锁，这个结构必须有，即使不需要改变options参数
     DistlockLockOptions lock_options = 11;
 }
 message DistlockLockResponse {

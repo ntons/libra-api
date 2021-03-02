@@ -46,10 +46,11 @@ message DatabaseGetResponse {
 message DatabaseSetRequest {
     EntryKey key = 1;
     google.protobuf.Any data = 9;
-    // 获取到的互斥锁，更新数据前会校验锁是否有效，如果锁无效则不会更新数据
-    // 如果不设置，数据则会被强制更新
+    // 获取到的互斥锁，更新数据前会校验锁是否有效，如果锁无效则不会更新数据。
+    // 如果不设置，数据则会被强制更新。
+    // 每次更新都会重置锁的TTL，即使更新失败。
     google.protobuf.Any lock_token = 10;
-    // 如果设置unlock_options会在操作完成时解锁，要求lock_token有效
+    // 设置unlock_options会在操作完成时解锁，要求lock_token有效
     DistlockUnlockOptions unlock_options = 11;
 }
 message DatabaseSetResponse {
