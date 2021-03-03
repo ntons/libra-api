@@ -32,6 +32,7 @@ message DistlockLockResponse {
 }
 
 message DistlockUnlockRequest {
+    EntryKey key = 1;
     google.protobuf.Any lock_token = 10;
     DistlockUnlockOptions unlock_options = 11;
 }
