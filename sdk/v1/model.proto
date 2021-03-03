@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package libra.sdk.v1;
+
+option go_package = "github.com/ntons/libra-go/api/sdk/v1";
+
+import "google/protobuf/any.proto";
+
+// PatchFrom(data_before_patch, data_after_patch) => patch
+// PatchTo(data_before_patch, patch) => data_after_patch
+message ModelPatch {
+    int64  from_revision    = 1; // patch from revision
+    int64  to_revision      = 2; // patch to revision
+    uint32 checksum         = 3; // checksum after patching
+    bytes  data             = 4; // patch payload
+}
