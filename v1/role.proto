@@ -4,8 +4,6 @@ package libra.v1;
 
 option go_package = "github.com/ntons/libra-go/api/v1";
 
-import "google/api/annotations.proto";
-
 // 角色注册表服务，需要用户登录状态
 // 角色代表用户所创建的逻辑实例，角色和用户为多对一关系
 // id      为该角色的唯一标识，全局唯一
@@ -14,30 +12,10 @@ import "google/api/annotations.proto";
 //         另外也可以作为分区分服的标识。
 // user_id 该角色所属的用户
 service Role {
-    rpc List(RoleListRequest) returns(RoleListResponse) {
-        option(google.api.http) = {
-            post: "/v1/role/list"
-            body: "*"
-        };
-    }
-    rpc Create(RoleCreateRequest) returns(RoleCreateResponse) {
-        option(google.api.http) = {
-            post: "/v1/role/create"
-            body: "*"
-        };
-    }
-    rpc SignIn(RoleSignInRequest) returns(RoleSignInResponse) {
-        option(google.api.http) = {
-            post: "/v1/role/sign-in"
-            body: "*"
-        };
-    }
-    rpc SetMetadata(RoleSetMetadataRequest) returns(RoleSetMetadataResponse) {
-        option(google.api.http) = {
-            post: "/v1/role/set-metadata"
-            body: "*"
-        };
-    }
+    rpc List(RoleListRequest) returns(RoleListResponse);
+    rpc Create(RoleCreateRequest) returns(RoleCreateResponse);
+    rpc SignIn(RoleSignInRequest) returns(RoleSignInResponse);
+    rpc SetMetadata(RoleSetMetadataRequest) returns(RoleSetMetadataResponse);
 }
 
 message RoleData {

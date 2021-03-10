@@ -4,35 +4,14 @@ package libra.v1;
 
 option go_package = "github.com/ntons/libra-go/api/v1";
 
-import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 
 // 用户注册表服务，需要外部登录态
 service User {
-    rpc Login(UserLoginRequest) returns(UserLoginResponse) {
-        option (google.api.http) = {
-            post: "/v1/user/login"
-            body: "*"
-        };
-    }
-    rpc Logout(UserLogoutRequest) returns(UserLogoutResponse) {
-        option (google.api.http) = {
-            post: "/v1/user/logout"
-            body: "*"
-        };
-    }
-    rpc Bind(UserBindRequest) returns(UserBindResponse) {
-        option (google.api.http) = {
-            post: "/v1/user/bind"
-            body: "*"
-        };
-    }
-    rpc SetMetadata(UserSetMetadataRequest) returns(UserSetMetadataResponse) {
-        option (google.api.http) = {
-            post: "/v1/user/set-metadata"
-            body: "*"
-        };
-    }
+    rpc Login(UserLoginRequest) returns(UserLoginResponse);
+    rpc Logout(UserLogoutRequest) returns(UserLogoutResponse);
+    rpc Bind(UserBindRequest) returns(UserBindResponse);
+    rpc SetMetadata(UserSetMetadataRequest) returns(UserSetMetadataResponse);
 }
 
 message UserData {
@@ -78,6 +57,9 @@ message UniformLoginState {
     // User which matchs one of the acct_id will be selected,
     // then all of the acct_id will be bind to this user.
     repeated string acct_id = 1;
+
+    // timestamp when signature signed
+    int64 timestamp = 13;
 
     // random string max length to 32 bytes
     // 16 bytes length at least is recommended
