@@ -56,6 +56,8 @@ message DevLoginState {
 message UniformLoginState {
     // User which matchs one of the acct_id will be selected,
     // then all of the acct_id will be bind to this user.
+    // All acct_id must be mapped to exact 0 or 1 user.
+    // All acct_id will be bind to this user.
     repeated string acct_id = 1;
 
     // timestamp when signature signed
@@ -66,7 +68,7 @@ message UniformLoginState {
     string nonce = 14;
 
     // the signature should be signed at SERVER SIDE,
-    // no matter the login request is sent from client or server.
+    // no matter the login request was sent from client or server.
     string signature = 15;
 }
 
