@@ -60,6 +60,9 @@ message UniformLoginState {
     // All acct_id will be bind to this user.
     repeated string acct_id = 1;
 
+    // user ip
+    string user_ip = 2;
+
     // timestamp when signature signed
     int64 timestamp = 13;
 
