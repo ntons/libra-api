@@ -16,7 +16,7 @@ service User {
 
 message UserData {
     string id = 1;
-    repeated string accts  = 4;
+    repeated string acct_ids = 4;
     map<string, string> metadata = 15;
 }
 
@@ -58,7 +58,7 @@ message UniformLoginState {
     // then all of the accts will be bind to this user.
     // All accts must be mapped to exact 0 or 1 user.
     // All accts will be bind to this user.
-    repeated string accts = 1;
+    repeated string acct_ids = 1;
 
     // user ip
     string user_ip = 2;
