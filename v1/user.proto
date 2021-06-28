@@ -16,7 +16,7 @@ service User {
 
 message UserData {
     string id = 1;
-    repeated string acct_id  = 4;
+    repeated string accts  = 4;
     map<string, string> metadata = 15;
 }
 
@@ -34,7 +34,7 @@ message UserLogoutResponse {
 }
 
 message UserBindRequest {
-    string acct_id = 1;
+    google.protobuf.Any state = 2; // the same as UserLoginRequest.state
 }
 message UserBindResponse {
 }
@@ -54,11 +54,11 @@ message DevLoginState {
 // should be verified via a third-party server, then send a login request
 // to librad to fetch passport(token).
 message UniformLoginState {
-    // User which matchs one of the acct_id will be selected,
-    // then all of the acct_id will be bind to this user.
-    // All acct_id must be mapped to exact 0 or 1 user.
-    // All acct_id will be bind to this user.
-    repeated string acct_id = 1;
+    // User which matchs one of the accts will be selected,
+    // then all of the accts will be bind to this user.
+    // All accts must be mapped to exact 0 or 1 user.
+    // All accts will be bind to this user.
+    repeated string accts = 1;
 
     // user ip
     string user_ip = 2;
