@@ -37,6 +37,7 @@ message UserBindRequest {
     google.protobuf.Any state = 2; // the same as UserLoginRequest.state
 }
 message UserBindResponse {
+    UserData user = 1;
 }
 
 message UserSetMetadataRequest {
