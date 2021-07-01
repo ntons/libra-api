@@ -11,6 +11,7 @@ service User {
     rpc Login(UserLoginRequest) returns(UserLoginResponse);
     rpc Logout(UserLogoutRequest) returns(UserLogoutResponse);
     rpc Bind(UserBindRequest) returns(UserBindResponse);
+    rpc Unbind(UserUnbindRequest) returns(UserUnbindResponse);
     rpc SetMetadata(UserSetMetadataRequest) returns(UserSetMetadataResponse);
 }
 
@@ -20,9 +21,16 @@ message UserData {
     map<string, string> metadata = 15;
 }
 
+message UserLoginOptions {
+    bool auto_create    = 1; // create an user if no user matched
+    bool auto_bind      = 2; // bind unmatched acctid to matched user
+    bool auto_transfer  = 3; // transfer acct to user if already bind
+}
+
 message UserLoginRequest {
     string app_id = 1;
-    google.protobuf.Any state = 2; // depending on implementation
+    google.protobuf.Any state = 2;
+    UserLoginOptions options = 3;
 }
 message UserLoginResponse {
     UserData user = 1;
@@ -37,7 +45,14 @@ message UserBindRequest {
     google.protobuf.Any state = 2; // the same as UserLoginRequest.state
 }
 message UserBindResponse {
-    UserData user = 1;
+    repeated string acct_ids = 1;
+}
+
+message UserUnbindRequest {
+    repeated string acct_ids = 1;
+}
+message UserUnbindResponse {
+    repeated string acct_ids = 1;
 }
 
 message UserSetMetadataRequest {
