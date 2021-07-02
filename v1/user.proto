@@ -13,6 +13,7 @@ service User {
     rpc Bind(UserBindRequest) returns(UserBindResponse);
     rpc Unbind(UserUnbindRequest) returns(UserUnbindResponse);
     rpc SetMetadata(UserSetMetadataRequest) returns(UserSetMetadataResponse);
+    rpc GetMetadata(UserGetMetadataRequest) returns(UserGetMetadataResponse);
 }
 
 message UserData {
@@ -60,6 +61,13 @@ message UserSetMetadataRequest {
     map<string, string> metadata = 1;
 }
 message UserSetMetadataResponse {
+}
+
+message UserGetMetadataRequest {
+    repeated string keys = 1;
+}
+message UserGetMetadataResponse {
+    map<string, string> metadata = 1;
 }
 
 // login state for development, no security mechanism required

@@ -16,6 +16,7 @@ service Role {
     rpc Create(RoleCreateRequest) returns(RoleCreateResponse);
     rpc SignIn(RoleSignInRequest) returns(RoleSignInResponse);
     rpc SetMetadata(RoleSetMetadataRequest) returns(RoleSetMetadataResponse);
+    rpc GetMetadata(RoleGetMetadataRequest) returns(RoleGetMetadataResponse);
 }
 
 message RoleData {
@@ -43,6 +44,14 @@ message RoleSetMetadataRequest {
     map<string, string> metadata = 2;
 }
 message RoleSetMetadataResponse {
+}
+
+message RoleGetMetadataRequest {
+    string role_id = 1;
+    repeated string keys = 2;
+}
+message RoleGetMetadataResponse {
+    map<string, string> metadata = 1;
 }
 
 message RoleSignInRequest {
