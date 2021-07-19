@@ -15,6 +15,8 @@ service Distlock {
 }
 
 message DistlockLockOptions {
+    // 自动超时时间
+    int32 timeout_milliseconds = 1;
 }
 message DistlockUnlockOptions {
     // 即使操作失败，依然释放锁
