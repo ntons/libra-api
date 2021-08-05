@@ -22,13 +22,9 @@ message UserData {
     map<string, string> metadata = 15;
 }
 
-message UserLoginOptions {
-    bool auto_create    = 1; // create an user if no user matched
-}
 message UserLoginRequest {
     string app_id = 1;
     google.protobuf.Any state = 2;
-    UserLoginOptions options = 3;
 }
 message UserLoginResponse {
     UserData user = 1;
@@ -39,12 +35,8 @@ message UserLogoutRequest {
 message UserLogoutResponse {
 }
 
-message UserBindOptions {
-    bool auto_transfer  = 1; // transfer acct to user if already bind
-}
 message UserBindRequest {
     google.protobuf.Any state = 2;
-    UserBindOptions options = 3;
 }
 message UserBindResponse {
     repeated string acct_ids = 1;
@@ -70,9 +62,12 @@ message UserGetMetadataResponse {
     map<string, string> metadata = 1;
 }
 
-// login state for development, no security mechanism required
-message DevLoginState {
-    string username = 1;
+// State features affect behavior
+message LoginStateFeatures {
+    // Create user if not found
+    bool create_user_if_not_found = 1;
+    // Take over acct_id if duplicated
+    bool take_over_acct_id_if_duplicated = 2;
 }
 
 // Librad not implement any account (check) system, the real account state
@@ -87,6 +82,9 @@ message UniformLoginState {
 
     // user ip
     string user_ip = 2;
+
+    // features
+    LoginStateFeatures features = 10;
 
     // timestamp when signature signed
     int64 timestamp = 13;
