@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package libra.v1;
 
-option go_package = "github.com/ntons/libra-go/api/v1";
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
-import "v1/chart.proto";
+import "libra/v1/chart.proto";
 
 // 冒泡排行榜，榜单元素以交换形式改变
 service BubbleChart {

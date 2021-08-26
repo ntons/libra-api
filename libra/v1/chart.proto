@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.v1;
 
-option go_package = "github.com/ntons/libra-go/api/v1";
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
 // chart key {app_id:name}[:suffix]
 // 一般情况下，suffix不需要提供，redis集群会以{app_id:name}

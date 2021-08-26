@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.v1;
 
-option go_package = "github.com/ntons/libra-go/api/v1";
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
 // S2S 用户管理服务
 service UserAdmin {

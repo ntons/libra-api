@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.v1;
 
-option go_package = "github.com/ntons/libra-go/api/v1";
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
 import "google/protobuf/any.proto";
 

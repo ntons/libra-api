@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package libra.v1;
 
-option go_package = "github.com/ntons/libra-go/api/v1";
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
 // 角色注册表服务，需要用户登录状态
 // 角色代表用户所创建的逻辑实例，角色和用户为多对一关系
