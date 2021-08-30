@@ -7,6 +7,7 @@ option go_package = "github.com/ntons/libra-go/api/libra/v1";
 // S2S 用户管理服务
 service UserAdmin {
     rpc SetMetadata(UserAdminSetMetadataRequest) returns(UserAdminSetMetadataResponse);
+    rpc GetMetadata(UserAdminGetMetadataRequest) returns(UserAdminGetMetadataResponse);
 }
 
 message UserAdminSetMetadataRequest {
@@ -16,4 +17,9 @@ message UserAdminSetMetadataRequest {
 message UserAdminSetMetadataResponse {
 }
 
-
+message UserAdminGetMetadataRequest {
+    string user_id = 1;
+}
+message UserAdminGetMetadataResponse {
+    map<string, string> metadata = 2;
+}
