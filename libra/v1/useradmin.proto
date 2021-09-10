@@ -18,8 +18,8 @@ service UserAdmin
     // 封禁用户
     rpc Ban(UserAdminBanRequest) returns(UserAdminBanResponse);
 
-    // 账号绑定转移
-    rpc TransAcctId (UserAdminTransAcctIdRequest) returns(UserAdminTransAcctIdResponse);
+    // 账号绑定
+    rpc BindAcctId(UserAdminBindAcctIdRequest) returns(UserAdminBindAcctIdResponse);
 }
 
 message UserAdminSetMetadataRequest
@@ -66,11 +66,13 @@ message UserAdminBanResponse
     repeated UserBanState states = 1;
 }
 
-message UserAdminTransAcctIdRequest
+message UserAdminBindAcctIdRequest
 {
-    string target_user_id = 1;  // 转移到目标用户
-    string acct_id = 2;         // 要转移的账号
+    string user_id = 1;  // 目标用户
+    repeated string acct_ids = 2;  // 要转移的账号
+
+    bool take_over_acct_id_if_duplicated = 8;
 }
-message UserAdminTransAcctIdResponse
+message UserAdminBindAcctIdResponse
 {
 }
