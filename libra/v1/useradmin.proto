@@ -4,22 +4,73 @@ package libra.v1;
 
 option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
+import "libra/v1/user.proto";
+
 // S2S 用户管理服务
-service UserAdmin {
+service UserAdmin
+{
     rpc SetMetadata(UserAdminSetMetadataRequest) returns(UserAdminSetMetadataResponse);
     rpc GetMetadata(UserAdminGetMetadataRequest) returns(UserAdminGetMetadataResponse);
+
+    // 查询用户
+    rpc Get(UserAdminGetRequest) returns(UserAdminGetResponse);
+
+    // 封禁用户
+    rpc Ban(UserAdminBanRequest) returns(UserAdminBanResponse);
+
+    // 账号绑定转移
+    rpc TransAcctId (UserAdminTransAcctIdRequest) returns(UserAdminTransAcctIdResponse);
 }
 
-message UserAdminSetMetadataRequest {
+message UserAdminSetMetadataRequest
+{
     string user_id = 1;
     map<string, string> metadata = 2;
 }
-message UserAdminSetMetadataResponse {
+message UserAdminSetMetadataResponse
+{
 }
 
-message UserAdminGetMetadataRequest {
+message UserAdminGetMetadataRequest
+{
     string user_id = 1;
 }
-message UserAdminGetMetadataResponse {
+message UserAdminGetMetadataResponse
+{
     map<string, string> metadata = 2;
+}
+
+message UserAdminGetRequest
+{
+    repeated string user_ids = 1;
+}
+message UserAdminGetResponse
+{
+    repeated UserData users = 1;
+}
+
+message UserBanState
+{
+    string id       = 1;
+    int64  ban_to   = 2;
+    string ban_for  = 3;
+}
+message UserAdminBanRequest
+{
+    repeated string user_ids = 1;
+    int64 ban_seconds = 2;
+    string ban_for = 3;
+}
+message UserAdminBanResponse
+{
+    repeated UserBanState states = 1;
+}
+
+message UserAdminTransAcctIdRequest
+{
+    string target_user_id = 1;  // 转移到目标用户
+    string acct_id = 2;         // 要转移的账号
+}
+message UserAdminTransAcctIdResponse
+{
 }
