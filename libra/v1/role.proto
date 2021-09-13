@@ -22,6 +22,7 @@ service Role {
 message RoleData {
     string id = 1;
     uint32 index = 2;
+    string user_id = 3;
     map<string, string> metadata = 15;
 }
 
