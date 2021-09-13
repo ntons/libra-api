@@ -58,8 +58,8 @@ message UserBanState
 message UserAdminBanRequest
 {
     repeated string user_ids = 1;
-    int64 ban_seconds = 2;
-    string ban_for = 3;
+    int64 seconds = 2;
+    string reason = 3;
 }
 message UserAdminBanResponse
 {
