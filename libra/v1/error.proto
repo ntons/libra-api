@@ -4,15 +4,19 @@ package libra.v1;
 
 option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
+// error detail could be returned in 2 form:
+// 1. string
+// 2. json structure { "err": ErrorCode, "msg": string, "data": {} }
+
 enum ErrorCode
 {
-    ErrorCodeOk = 0; // OK
+    ErrorCodeNone = 0; // OK
     // PermissionDenied = 7xxxx
     ErrorCodeBan  = 70001;
 }
 
 // ErrorCodeBan
-message BanDetail
+message ErrorBanDetail
 {
     string user_id = 1;
     int32  ban_to  = 2;
