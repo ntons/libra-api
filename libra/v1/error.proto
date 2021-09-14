@@ -4,6 +4,8 @@ package libra.v1;
 
 option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
+import "google/protobuf/any.proto";
+
 // error detail could be returned in 2 form:
 // 1. string
 // 2. json structure { "err": ErrorCode, "msg": string, "data": {} }
@@ -15,8 +17,15 @@ enum ErrorCode
     ErrorCodeBan  = 70001;
 }
 
+message ErrorDetail
+{
+    ErrorCode code = 1;
+    string    msg  = 2;
+    google.protobuf.Any data = 3;
+}
+
 // ErrorCodeBan
-message ErrorBanDetail
+message BanErrorDetail
 {
     string user_id = 1;
     int32  ban_to  = 2;
