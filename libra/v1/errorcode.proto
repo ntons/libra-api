@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+enum ErrorCode
+{
+    ErrorCodeOk = 0; // OK
+    // PermissionDenied = 7xxxx
+    ErrorCodeBan  = 70001;
+}
+
+// ErrorCodeBan
+message BanDetail
+{
+    string user_id = 1;
+    int32  ban_to  = 2;
+    string ban_for = 3;
+}
