@@ -45,7 +45,7 @@ message UserAdminGetRequest
 
     message Options
     {
-        bool fuzzy_id = 1; // id may be user or role
+        bool fuzzy = 1; // id may be user or role
         bool with_roles = 2; // get user and related roles
     }
     Options options = 10; // get options
