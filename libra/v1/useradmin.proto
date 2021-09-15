@@ -9,16 +9,14 @@ import "libra/v1/user.proto";
 // S2S 用户管理服务
 service UserAdmin
 {
+    // 元数据
     rpc SetMetadata(UserAdminSetMetadataRequest) returns(UserAdminSetMetadataResponse);
     rpc GetMetadata(UserAdminGetMetadataRequest) returns(UserAdminGetMetadataResponse);
-
-    // 查询用户
+    // 查询详细信息
     rpc Get(UserAdminGetRequest) returns(UserAdminGetResponse);
-
-    // 封禁用户
+    // 封禁
     rpc Ban(UserAdminBanRequest) returns(UserAdminBanResponse);
-
-    // 账号绑定
+    // 绑定
     rpc BindAcctId(UserAdminBindAcctIdRequest) returns(UserAdminBindAcctIdResponse);
 }
 
@@ -42,11 +40,19 @@ message UserAdminGetMetadataResponse
 
 message UserAdminGetRequest
 {
-    repeated string user_ids = 1;
+    repeated string ids = 1;
+
+    message Options
+    {
+        bool fuzzy_id = 1; // id may be user or role
+        bool with_roles = 2; // get user and related roles
+    }
+    Options options = 10; // get options
 }
 message UserAdminGetResponse
 {
     repeated UserData users = 1;
+    repeated RoleData roles = 2;
 }
 
 message UserBanState

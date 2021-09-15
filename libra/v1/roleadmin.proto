@@ -14,7 +14,7 @@ service RoleAdmin
 
 message RoleAdminGetRequest
 {
-    repeated string role_ids = 1;
+    repeated string ids = 1;
 }
 message RoleAdminGetResponse
 {
