@@ -19,6 +19,11 @@ service User {
 message UserData {
     string id = 1;
     repeated string acct_ids = 4;
+    int64 create_at = 5;
+    int64 login_at = 6;
+    string login_ip = 7;
+    int64 ban_to = 8;
+    string ban_for = 9;
     map<string, string> metadata = 15;
 }
 
