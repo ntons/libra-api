@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+// 应用查询服务
+service App
+{
+    // 获取应用列表
+    rpc List(AppListRequest) returns(AppListResponse);
+    // 监视应用列表
+    rpc Watch(AppListRequest) returns(stream AppListResponse);
+}
+
+message AppData
+{
+    string id = 1;
+}
+
+message AppListRequest
+{
+}
+message AppListResponse
+{
+    repeated AppData apps = 1;
+}

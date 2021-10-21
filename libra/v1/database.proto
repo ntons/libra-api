@@ -7,7 +7,7 @@ option go_package = "github.com/ntons/libra-go/api/libra/v1";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
-import "libra/v1/entrykey.proto";
+import "libra/v1/entry_key.proto";
 import "libra/v1/distlock.proto";
 
 // 数据存储服务
