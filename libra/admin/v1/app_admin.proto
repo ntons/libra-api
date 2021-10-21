@@ -5,12 +5,12 @@ package libra.admin.v1;
 option go_package = "github.com/ntons/libra-go/api/libra/admin/v1";
 
 // 应用查询服务
-service App
+service AppAdmin
 {
     // 获取应用列表
-    rpc List(AppListRequest) returns(AppListResponse);
+    rpc List(AppAdminListRequest) returns(AppAdminListResponse);
     // 监视应用列表
-    rpc Watch(AppListRequest) returns(stream AppListResponse);
+    rpc Watch(AppAdminListRequest) returns(stream AppAdminListResponse);
 }
 
 message AppData
@@ -18,10 +18,10 @@ message AppData
     string id = 1;
 }
 
-message AppListRequest
+message AppAdminListRequest
 {
 }
-message AppListResponse
+message AppAdminListResponse
 {
     repeated AppData apps = 1;
 }
