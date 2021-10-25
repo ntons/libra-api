@@ -75,12 +75,6 @@ message LoginStateProperties {
     bool take_over_acct_id_if_duplicated = 2;
 }
 
-// feature belonging to session will be saved in session data
-message SessionFeature {
-    string key = 1;
-    string value = 2;
-}
-
 // Librad not implement any account (check) system, the real account state
 // should be verified via a third-party server, then send a login request
 // to librad to fetch passport(token).
@@ -94,11 +88,11 @@ message UniformLoginState {
     // user ip
     string user_ip = 2;
 
+    // acct details, self-describing
+    map<string, string> acct_details = 3;
+
     // inherent properties of state
     LoginStateProperties properties = 10;
-
-    // session features
-    repeated SessionFeature features = 11;
 
     // timestamp when signature signed
     int64 timestamp = 13;
