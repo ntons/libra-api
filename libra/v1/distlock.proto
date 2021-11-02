@@ -12,6 +12,16 @@ import "libra/v1/entry_key.proto";
 service Distlock {
     rpc Lock(DistlockLockRequest) returns(DistlockLockResponse);
     rpc Unlock(DistlockUnlockRequest) returns(DistlockUnlockResponse);
+
+    // 获取
+    rpc Obtain(DistlockObtainRequest) returns(DistlockObtainResponse);
+    // 续期
+    rpc Refresh(DistlockRefreshRequest) returns(DistlockRefreshResponse);
+    // 释放
+    rpc Release(DistlockReleaseRequest) returns(DistlockReleaseResponse);
+    // 保持，客户端必须在收到Notice时回应Request
+    // 如果当前已经Obtain到了token，在Hold时候一并发送，否则Hold将尝试重新获取
+    rpc Hold(stream DistlockHoldRequest) returns(stream DistlockHoldNotice);
 }
 
 message DistlockLockOptions {
@@ -39,5 +49,35 @@ message DistlockUnlockRequest {
     DistlockUnlockOptions unlock_options = 11;
 }
 message DistlockUnlockResponse {
+}
+
+message DistlockObtainRequest {
+    string key = 1;
+    int32 timeout_milliseconds = 10;
+}
+message DistlockObtainResponse {
+    string lock_token = 2;
+}
+
+message DistlockRefreshRequest {
+    string key = 1;
+    string lock_token = 2;
+    int32 timeout_milliseconds = 10;
+}
+message DistlockRefreshResponse {
+}
+
+message DistlockReleaseRequest {
+    string key = 1;
+    string lock_token = 2;
+}
+message DistlockReleaseResponse {
+}
+
+message DistlockHoldRequest {
+    string key = 1;
+    string lock_token = 2;
+}
+message DistlockHoldNotice {
 }
 

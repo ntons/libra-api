@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+// 缓存服务
+service Cache {
+    // 获取缓存
+    rpc Get(CacheSetRequest) returns(CacheGetResponse);
+    // 设置缓存
+    rpc Set(CacheSetRequest) returns(CacheSetResponse);
+    // 新增缓存
+    rpc Add(CacheAddRequest) returns(CacheAddResponse);
+}
+
+message CacheOptions {
+    int32 timeout_milliseconds = 1;
+}
+
+message CacheGetRequest {
+    string key = 1;
+}
+message CacheGetResponse {
+    bytes value = 2;
+}
+
+message CacheSetRequest {
+    string key = 1;
+    bytes value = 2;
+    CacheOptions options = 3;
+}
+message CacheSetResponse {
+}
+
+message CacheAddRequest {
+    string key = 1;
+    bytes value = 2;
+    CacheOptions options = 3;
+}
+message CacheAddResponse {
+}
+
