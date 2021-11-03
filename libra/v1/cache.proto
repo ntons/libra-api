@@ -7,7 +7,7 @@ option go_package = "github.com/ntons/libra-go/api/libra/v1";
 // 缓存服务
 service Cache {
     // 获取缓存
-    rpc Get(CacheSetRequest) returns(CacheGetResponse);
+    rpc Get(CacheGetRequest) returns(CacheGetResponse);
     // 设置缓存
     rpc Set(CacheSetRequest) returns(CacheSetResponse);
     // 新增缓存
