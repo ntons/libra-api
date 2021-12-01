@@ -6,8 +6,17 @@ option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
 import "google/protobuf/any.proto";
 
+import "libra/v1/role.proto";
+
 // 用户注册表服务，需要外部登录态
 service User {
+    // 查询详细信息
+    rpc Get(UserGetRequest) returns(UserGetResponse);
+    // 封禁
+    rpc Ban(UserBanRequest) returns(UserBanResponse);
+    // 绑定
+    rpc BindAcctId(UserBindAcctIdRequest) returns(UserBindAcctIdResponse);
+
     rpc Login(UserLoginRequest) returns(UserLoginResponse);
     rpc Logout(UserLogoutRequest) returns(UserLogoutResponse);
     rpc Bind(UserBindRequest) returns(UserBindResponse);
@@ -27,6 +36,51 @@ message UserData {
     map<string, string> metadata = 15;
 }
 
+message UserGetRequest
+{
+    repeated string ids = 1;
+
+    message Options
+    {
+        bool fuzzy = 1; // id may be user or role
+        bool with_roles = 2; // get user and related roles
+    }
+    Options options = 10; // get options
+}
+message UserGetResponse
+{
+    repeated UserData users = 1;
+    repeated RoleData roles = 2;
+}
+
+message UserBanState
+{
+    string id       = 1;
+    int64  ban_to   = 2;
+    string ban_for  = 3;
+}
+message UserBanRequest
+{
+    repeated string user_ids = 1;
+    int64 seconds = 2;
+    string reason = 3;
+}
+message UserBanResponse
+{
+    repeated UserBanState states = 1;
+}
+
+message UserBindAcctIdRequest
+{
+    string user_id = 1;  // 目标用户
+    repeated string acct_ids = 2;  // 要转移的账号
+
+    bool take_over_acct_id_if_duplicated = 8;
+}
+message UserBindAcctIdResponse
+{
+}
+
 message UserLoginRequest {
     string app_id = 1;
     google.protobuf.Any state = 2;
@@ -38,12 +92,13 @@ message UserLoginResponse {
 }
 
 message UserLogoutRequest {
+    string user_id = 1;
 }
 message UserLogoutResponse {
 }
 
 message UserBindRequest {
-    string role_id = 1;
+    string user_id = 1;
     google.protobuf.Any state = 2;
 }
 message UserBindResponse {
@@ -52,6 +107,7 @@ message UserBindResponse {
 
 message UserUnbindRequest {
     repeated string acct_ids = 1;
+    string user_id = 2;
 }
 message UserUnbindResponse {
     repeated string acct_ids = 1;
@@ -59,12 +115,14 @@ message UserUnbindResponse {
 
 message UserSetMetadataRequest {
     map<string, string> metadata = 1;
+    string user_id = 2;
 }
 message UserSetMetadataResponse {
 }
 
 message UserGetMetadataRequest {
     repeated string keys = 1;
+    string user_id = 2;
 }
 message UserGetMetadataResponse {
     map<string, string> metadata = 1;

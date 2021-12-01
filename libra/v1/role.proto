@@ -12,6 +12,7 @@ option go_package = "github.com/ntons/libra-go/api/libra/v1";
 //         另外也可以作为分区分服的标识。
 // user_id 该角色所属的用户
 service Role {
+    rpc Get(RoleGetRequest) returns(RoleGetResponse);
     rpc List(RoleListRequest) returns(RoleListResponse);
     rpc Create(RoleCreateRequest) returns(RoleCreateResponse);
     rpc SignIn(RoleSignInRequest) returns(RoleSignInResponse);
@@ -24,6 +25,15 @@ message RoleData {
     uint32 index = 2;
     string user_id = 3;
     map<string, string> metadata = 15;
+}
+
+message RoleGetRequest
+{
+    repeated string ids = 1;
+}
+message RoleGetResponse
+{
+    repeated RoleData roles = 1;
 }
 
 message RoleListRequest {
