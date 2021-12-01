@@ -27,14 +27,17 @@ message RoleData {
 }
 
 message RoleListRequest {
+    string user_id = 1;
 }
 message RoleListResponse {
     repeated RoleData roles = 1;
+    string access_token = 10;
 }
 
 message RoleCreateRequest {
     uint32 index = 1;
     map<string, string> metadata = 2;
+    string user_id = 3;
 }
 message RoleCreateResponse {
     RoleData role = 1;

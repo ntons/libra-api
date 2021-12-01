@@ -43,6 +43,7 @@ message UserLogoutResponse {
 }
 
 message UserBindRequest {
+    string role_id = 1;
     google.protobuf.Any state = 2;
 }
 message UserBindResponse {
