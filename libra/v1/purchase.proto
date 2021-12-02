@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+// 订单服务
+service Order {
+    // 查询订单
+    rpc Get(OrderGetRequest) returns(OrderGetResponse);
+
+    // 创建订单
+    rpc Create(OrderCreateRequest) returns(OrderCreateResponse);
+
+    // 取消订单
+    rpc Cancel(OrderCancelRequest) returns(OrderCancelResponse);
+
+    // 设置订单已支付
+    rpc Pay(OrderPayRequest) returns(OrderPayResponse);
+
+    // 设置订单已完成
+    rpc Fulfill(OrderFulfillRequest) returns(OrderFulfillResponse);
+}
+
+enum PurchaseState {
+    PurchaseStateUnspecified    = 0;
+    // 订单已创建，等待后续操作
+    PurchaseStatePending        = 1;
+    // 用户取消订单
+    PurchaseStateCanceled       = 2;
+    // 订单已支付
+    PurchaseStatePaid           = 3;
+    // 订单已发货
+    PurchaseStateFulfilled      = 4;
+}
+
+message PurchaseData {
+    ///// 订单信息
+
+    // 订单ID
+    string order_id = 1;
+    // 订单状态
+    PurchaseState state = 2;
+    // 创建时间
+    int64 create_at = 3;
+    // 货币名称 CNY USD 等
+    string currency = 5;
+    // 支付金额
+    string price = 6;
+    // 应用ID
+    string app_id = 7;
+    // 渠道名称
+    string channel_id = 9;
+
+    // 取消购买时间
+    int64 cancel_at = 30;
+    // 取消原因
+    string cancel_reason = 31;
+
+    // 支付时间
+    int64 pay_at = 40;
+    // 支付ID
+    string transaction_id = 41;
+    // 支付凭证
+    string receipt = 42;
+
+    // 发货时间
+    int64 fulfill_at = 50;
+
+    ///// 业务归因信息
+
+    // 透传
+    //string payload = 100;
+    // 商品ID
+    string product_id = 101;
+    // 商品名称
+    string product_name = 102;
+    // 商品数量
+    string product_quantity = 103;
+    // 用户ID
+    string user_id = 123;
+    // 角色ID
+    string role_id = 124;
+}
+
+message OrderGetRequest {
+    message Filter {
+        string order_id = 1;
+        string user_id = 2;
+        string role_id = 3;
+        string state = 4;
+    }
+    repeated Filter filters = 1;
+}
+message OrderGetResponse {
+    repeated PurchaseData orders = 1;
+}
+
+message OrderCreateRequest {
+    // 使用者必须自行保证订单ID的唯一性
+    // 如果订单ID已存在，会被认为是同一请求因为某种原因进行重试，
+    // 因此会保持先前订单不变但返回创建成功（幂等）。
+    string order_id = 1;
+    // 货币名称 CNY USD 等
+    string currency = 5;
+    // 支付金额
+    string price = 6;
+    // 渠道名称
+    string channel_id = 9;
+    // 商品ID
+    string product_id = 101;
+    // 商品名称
+    string product_name = 102;
+    // 商品数量
+    string product_quantity = 103;
+    // 用户ID
+    string user_id = 123;
+    // 角色ID
+    string role_id = 124;
+}
+message OrderCreateResponse {
+    PurchaseData data = 1;
+}
+
+message OrderCancelRequest {
+    string order_id = 1;
+    string reason = 2;
+}
+message OrderCancelResponse {
+}
+
+message OrderPayRequest {
+    // 订单ID
+    string order_id = 1;
+    // 支付ID
+    string transaction_id = 2;
+    // 支付凭证
+    string receipt = 3;
+}
+message OrderPayResponse {
+}
+
+message OrderFulfillRequest {
+    string order_id = 1;
+}
+message OrderFulfillResponse {
+}
+
