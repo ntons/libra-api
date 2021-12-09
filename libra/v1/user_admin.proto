@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+import "libra/v1/user.proto";
+import "libra/v1/role.proto";
+
+// S2S 用户管理服务
+service UserAdmin
+{
+    // 元数据
+    rpc SetMetadata(UserAdminSetMetadataRequest) returns(UserAdminSetMetadataResponse);
+    rpc GetMetadata(UserAdminGetMetadataRequest) returns(UserAdminGetMetadataResponse);
+    // 查询详细信息
+    rpc Get(UserAdminGetRequest) returns(UserAdminGetResponse);
+    // 封禁
+    rpc Ban(UserAdminBanRequest) returns(UserAdminBanResponse);
+    // 绑定
+    rpc BindAcctId(UserAdminBindAcctIdRequest) returns(UserAdminBindAcctIdResponse);
+}
+
+message UserAdminSetMetadataRequest
+{
+    string user_id = 1;
+    map<string, string> metadata = 2;
+}
+message UserAdminSetMetadataResponse
+{
+}
+
+message UserAdminGetMetadataRequest
+{
+    string user_id = 1;
+}
+message UserAdminGetMetadataResponse
+{
+    map<string, string> metadata = 2;
+}
+
+message UserAdminGetRequest
+{
+    repeated string ids = 1;
+
+    message Options
+    {
+        bool fuzzy = 1; // id may be user or role
+        bool with_roles = 2; // get user and related roles
+    }
+    Options options = 10; // get options
+}
+message UserAdminGetResponse
+{
+    repeated UserData users = 1;
+    repeated RoleData roles = 2;
+}
+
+message UserAdminBanRequest
+{
+    repeated string user_ids = 1;
+    int64 seconds = 2;
+    string reason = 3;
+}
+message UserAdminBanResponse
+{
+    repeated UserBanState states = 1;
+}
+
+message UserAdminBindAcctIdRequest
+{
+    string user_id = 1;  // 目标用户
+    repeated string acct_ids = 2;  // 要转移的账号
+
+    bool take_over_acct_id_if_duplicated = 8;
+}
+message UserAdminBindAcctIdResponse
+{
+}
