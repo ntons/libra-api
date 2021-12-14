@@ -64,6 +64,7 @@ message UserBanRequest
     repeated string user_ids = 1;
     int64 seconds = 2;
     string reason = 3;
+    repeated string acct_ids = 4;
 }
 message UserBanResponse
 {
