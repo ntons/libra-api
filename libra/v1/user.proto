@@ -62,9 +62,9 @@ message UserBanState
 message UserBanRequest
 {
     repeated string user_ids = 1;
-    int64 seconds = 2;
+    int64 seconds = 2; // 如果<0 解封
     string reason = 3;
-    repeated string acct_ids = 4;
+    bool with_accts = 4; // 同时把所有账号(解)封了
 }
 message UserBanResponse
 {
