@@ -14,6 +14,8 @@ service User {
     rpc Get(UserGetRequest) returns(UserGetResponse);
     // 封禁
     rpc Ban(UserBanRequest) returns(UserBanResponse);
+    // 扩展封禁
+    rpc Block(UserBlockRequest) returns(UserBlockResponse);
     // 绑定
     rpc BindAcctId(UserBindAcctIdRequest) returns(UserBindAcctIdResponse);
 
@@ -36,55 +38,74 @@ message UserData {
     map<string, string> metadata = 15;
 }
 
-message UserGetRequest
-{
+message UserGetRequest {
     repeated string ids = 1;
 
-    message Options
-    {
+    message Options {
         bool fuzzy = 1; // id may be user or role
         bool with_roles = 2; // get user and related roles
     }
     Options options = 10; // get options
 }
-message UserGetResponse
-{
+message UserGetResponse {
     repeated UserData users = 1;
     repeated RoleData roles = 2;
 }
 
-message UserBanState
-{
+message UserBanState {
     string id       = 1;
     int64  ban_to   = 2;
     string ban_for  = 3;
 }
-message UserBanRequest
-{
+message UserBanRequest {
     repeated string user_ids = 1;
-    int64 seconds = 2; // 如果<0 解封
+    int64 seconds = 2; // unban if less than 0
     string reason = 3;
-    bool with_accts = 4; // 同时把所有账号(解)封了
 }
-message UserBanResponse
-{
+message UserBanResponse {
     repeated UserBanState states = 1;
 }
 
-message UserBindAcctIdRequest
-{
+message UserBlockRequest {
+    int64 seconds = 2; // unban if less than 0
+    string reason = 3;
+
+    repeated string acct_ids   = 8;
+    repeated string device_ids = 9;
+    repeated string client_ips = 10;
+}
+message UserBlockResponse {
+}
+
+message UserBindAcctIdRequest {
     string user_id = 1;  // 目标用户
     repeated string acct_ids = 2;  // 要转移的账号
 
     bool take_over_acct_id_if_duplicated = 8;
 }
-message UserBindAcctIdResponse
-{
+message UserBindAcctIdResponse {
 }
 
 message UserLoginRequest {
     string app_id = 1;
     google.protobuf.Any state = 2;
+
+    // 设备信息
+    message Device {
+        string id = 1;
+        string name = 2;
+        string model = 3;
+        string os = 4;
+    }
+    Device device = 5;
+
+    // 客户端信息
+    message Client {
+        string ip = 1;
+        string version = 2;
+    }
+    Client client = 6;
+
     // options
     bool create_if_not_found = 10;
 }
