@@ -19,24 +19,38 @@ message CacheOptions {
 }
 
 message CacheGetRequest {
+    message Options {
+        // Polling in C# cause NotFound exception which lead to high latency
+        bool regard_not_found_as_empty = 1;
+    }
+
     string key = 1;
+    Options options = 10;
 }
 message CacheGetResponse {
     bytes value = 2;
 }
 
 message CacheSetRequest {
+    message Options {
+        int32 timeout_milliseconds = 1;
+    }
+
     string key = 1;
     bytes value = 2;
-    CacheOptions options = 3;
+    Options options = 3;
 }
 message CacheSetResponse {
 }
 
 message CacheAddRequest {
+    message Options {
+        int32 timeout_milliseconds = 1;
+    }
+
     string key = 1;
     bytes value = 2;
-    CacheOptions options = 3;
+    Options options = 3;
 }
 message CacheAddResponse {
 }

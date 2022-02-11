@@ -37,8 +37,14 @@ message MailboxPushResponse {
 }
 
 message MailboxPullRequest {
+    message Options {
+        // Polling in C# cause NotFound exception which lead to high latency
+        bool regard_not_found_as_empty = 1;
+    }
     EntryKey key = 1;
     repeated string ids = 2;
+
+    Options options = 10;
 }
 message MailboxPullResponse {
     repeated string pulled_ids = 1; // pulled id list
