@@ -12,43 +12,33 @@ service Gateway {
     // Methods access from client side
     ////////////////////////////////////////////////////////////////////////////
     // Establish the back pushing stream
-    rpc Connect(GatewayConnectRequest) returns(stream google.protobuf.Any);
+    rpc Watch(stream GatewayWatchRequest) returns(stream GatewayMessage);
 
     ////////////////////////////////////////////////////////////////////////////
     // Methods access from server side
     ////////////////////////////////////////////////////////////////////////////
     // Send message to client
     rpc Send(GatewaySendRequest) returns(GatewaySendResponse);
-
-    // Let a certain client to subscribe broadcast channels
-    rpc Subscribe(GatewaySubscribeRequest) returns(GatewaySubscribeResponse);
-    // let a certain client to unsubscribe broadcast channels
-    rpc Unsubscribe(GatewayUnsubscribeRequest) returns(GatewayUnsubscribeResponse);
-
-    // Broadcast to a channel
-    rpc Broadcast(GatewayBroadcastRequest) returns(GatewayBroadcastResponse);
 }
 
-message GatewayConnectRequest {}
+message GatewayMessage {
+    string topic = 1;
+    string id = 2;
+    string producer_name = 3;
+    int64 event_time = 4;
+    int64 publish_time = 5;
+    map<string, string> properties = 6;
+    google.protobuf.Any value = 10;
+}
+
+message GatewayWatchRequest {
+    string topic = 1;
+    string cursor = 2;
+}
 
 message GatewaySendRequest {
-    google.protobuf.Any data = 10;
+    int64 max_len = 1;
+    GatewayMessage msg = 10;
 }
 message GatewaySendResponse {}
-
-message GatewaySubscribeRequest {
-    repeated string keys = 1;
-}
-message GatewaySubscribeResponse {}
-
-message GatewayUnsubscribeRequest {
-    repeated string keys = 1;
-}
-message GatewayUnsubscribeResponse {}
-
-message GatewayBroadcastRequest {
-    string key = 1;
-    google.protobuf.Any data = 2;
-}
-message GatewayBroadcastResponse {}
 
