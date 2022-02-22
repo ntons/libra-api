@@ -38,6 +38,7 @@ message GatewayWatchRequest {
 
 message GatewaySendRequest {
     int64 max_len = 1;
+    bool auto_create = 2;
     GatewayMessage msg = 10;
 }
 message GatewaySendResponse {}
