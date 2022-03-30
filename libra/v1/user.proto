@@ -12,6 +12,8 @@ import "libra/v1/role.proto";
 service User {
     // 查询详细信息
     rpc Get(UserGetRequest) returns(UserGetResponse);
+    // 扩展查询
+    rpc Query(UserQueryRequest) returns(UserQueryResponse);
     // 封禁
     rpc Ban(UserBanRequest) returns(UserBanResponse);
     // 扩展封禁
@@ -51,6 +53,21 @@ message UserGetRequest {
 message UserGetResponse {
     repeated UserData users = 1;
     repeated RoleData roles = 2;
+}
+
+message UserQueryRequest {
+    message Options {
+        bool with_roles = 2;
+    }
+    Options options = 1;
+
+    oneof filter {
+        //string acct_id = 10;
+        string acct_name = 11;
+        string acct_email = 12;
+    }
+}
+message UserQueryResponse {
 }
 
 message UserBanState {
