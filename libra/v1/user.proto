@@ -61,13 +61,14 @@ message UserQueryRequest {
     }
     Options options = 1;
 
-    oneof filter {
-        //string acct_id = 10;
-        string acct_name = 11;
-        string acct_email = 12;
+    message Filters {
+        map<string, string> acct_details = 1;
     }
+    Filters filters = 2;
 }
 message UserQueryResponse {
+    repeated UserData users = 1;
+    repeated RoleData roles = 2;
 }
 
 message UserBanState {
