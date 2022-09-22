@@ -8,11 +8,13 @@ import "libra/v1/chart.proto";
 
 // 标准排行榜，按指定权重由大到小排列元素
 service Leaderboard {
+    // add entry if not on chart
+    rpc Add(LeaderboardAddRequest) returns(LeaderboardAddResponse);
     // set entry score by id
     // set entry info if info field not empty
     rpc SetScore(LeaderboardSetScoreRequest) returns(LeaderboardSetScoreResponse);
     // incr entry score by id, if id not exists, add it with score
-    // set entry info if info filed not empty
+    // set entry info if info field not empty
     rpc IncrScore(LeaderboardIncrScoreRequest) returns(LeaderboardIncrScoreResponse);
     // get entries by range
     rpc GetRange(LeaderboardGetRangeRequest) returns(LeaderboardGetRangeResponse);
@@ -22,6 +24,14 @@ service Leaderboard {
     rpc RemoveById(LeaderboardRemoveByIdRequest) returns(LeaderboardRemoveByIdResponse);
     // set entry info by id
     rpc SetInfo(LeaderboardSetInfoRequest) returns(LeaderboardSetInfoResponse);
+}
+
+message LeaderboardAddRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardAddResponse {
 }
 
 message LeaderboardSetScoreRequest {
