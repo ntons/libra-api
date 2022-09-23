@@ -24,6 +24,8 @@ service Leaderboard {
     rpc RemoveById(LeaderboardRemoveByIdRequest) returns(LeaderboardRemoveByIdResponse);
     // set entry info by id
     rpc SetInfo(LeaderboardSetInfoRequest) returns(LeaderboardSetInfoResponse);
+    // random entries by score
+    rpc RandByScore(LeaderboardRandByScoreRequest) returns(LeaderboardRandByScoreResponse);
 }
 
 message LeaderboardAddRequest {
@@ -86,3 +88,16 @@ message LeaderboardSetInfoRequest {
 message LeaderboardSetInfoResponse {
 }
 
+message LeaderboardRandByScoreRequest {
+    message Interval {
+        int64 min = 1;
+        int64 max = 2;
+        uint32 count = 3;
+    }
+    repeated Interval intervals = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardRandByScoreResponse {
+    repeated ChartEntry entries = 1;
+}
