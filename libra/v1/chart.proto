@@ -40,5 +40,7 @@ message ChartOptions {
     int64 expire_at = 3;
     // chart expire after duration, if expire_at set, this option was ignored
     int64 idle_expire = 4;
+    // not trim tail if reach capacity, an chart full error will be return
+    bool not_trim = 5;
 }
 
