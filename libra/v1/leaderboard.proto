@@ -57,7 +57,6 @@ message LeaderboardIncrScoreResponse {
 message LeaderboardGetRangeRequest {
     int32 offset = 1;
     int32 count = 2;
-    bool discard_info = 5;
     ChartOptions options = 10;
     ChartKey key = 11;
 }
@@ -67,7 +66,6 @@ message LeaderboardGetRangeResponse {
 
 message LeaderboardGetByIdRequest {
     repeated string ids = 1;
-    bool discard_info = 5;
     ChartOptions options = 10;
     ChartKey key = 11;
 }

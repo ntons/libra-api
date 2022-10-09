@@ -42,5 +42,7 @@ message ChartOptions {
     int64 idle_expire = 4;
     // not trim tail if reach capacity, an OutOfRange error will be return
     bool not_trim = 5;
+    // discard info in query results
+    bool discard_info = 6;
 }
 
