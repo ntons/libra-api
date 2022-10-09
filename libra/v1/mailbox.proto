@@ -13,6 +13,8 @@ service Mailbox {
     rpc List(MailboxListRequest) returns(MailboxListResponse);
     rpc Push(MailboxPushRequest) returns(MailboxPushResponse);
     rpc Pull(MailboxPullRequest) returns(MailboxPullResponse);
+    // 支持批量收件人
+    rpc Send(MailboxSendRequest) returns(MailboxSendResponse);
 }
 
 message Mail {
@@ -49,3 +51,11 @@ message MailboxPullResponse {
     repeated string pulled_ids = 1; // pulled id list
 }
 
+message MailboxSendRequest {
+    repeated EntryKey keys = 1;
+    google.protobuf.Any data = 2; // payload
+    int32 capacity = 3; // maximum mails to keep
+    bool remove_earliest_on_full = 4; // using ring to keep mails
+}
+message MailboxSendResponse {
+}
