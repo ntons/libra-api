@@ -52,10 +52,13 @@ message MailboxPullResponse {
 }
 
 message MailboxSendRequest {
-    repeated EntryKey keys = 1;
-    google.protobuf.Any data = 2; // payload
-    int32 capacity = 3; // maximum mails to keep
-    bool remove_earliest_on_full = 4; // using ring to keep mails
+    message Envelope {
+        repeated EntryKey keys = 1;
+        google.protobuf.Any data = 2;
+        int32 capacity = 3; // maximum mails to keep
+        bool remove_earliest_on_full = 4; // using ring to keep mails
+    }
+    repeated Envelope envelopes = 1;
 }
 message MailboxSendResponse {
 }
