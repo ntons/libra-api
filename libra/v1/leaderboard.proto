@@ -26,6 +26,8 @@ service Leaderboard {
     rpc SetInfo(LeaderboardSetInfoRequest) returns(LeaderboardSetInfoResponse);
     // random entries by score
     rpc RandByScore(LeaderboardRandByScoreRequest) returns(LeaderboardRandByScoreResponse);
+    //
+    rpc Touch(LeaderboardTouchRequest) returns(LeaderboardTouchResponse)
 }
 
 message LeaderboardAddRequest {
@@ -101,4 +103,11 @@ message LeaderboardRandByScoreRequest {
 }
 message LeaderboardRandByScoreResponse {
     repeated ChartEntry entries = 1;
+}
+
+message LeaderboardTouchRequest {
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardTouchResponse {
 }
