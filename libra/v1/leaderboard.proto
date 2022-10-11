@@ -27,7 +27,7 @@ service Leaderboard {
     // random entries by score
     rpc RandByScore(LeaderboardRandByScoreRequest) returns(LeaderboardRandByScoreResponse);
     //
-    rpc Touch(LeaderboardTouchRequest) returns(LeaderboardTouchResponse)
+    rpc Touch(LeaderboardTouchRequest) returns(LeaderboardTouchResponse);
 }
 
 message LeaderboardAddRequest {
