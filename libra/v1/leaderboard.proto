@@ -13,7 +13,7 @@ service Leaderboard {
     // set entry info by id
     rpc SetInfo(LeaderboardSetInfoRequest) returns(LeaderboardSetInfoResponse);
     // get entries by rank
-    rpc GetByRank(LeaderboardSetRequest) returns(LeaderboardSetResponse);
+    rpc GetByRank(LeaderboardGetByRankRequest) returns(LeaderboardGetByRankResponse);
     // get entries by id
     rpc GetById(LeaderboardGetByIdRequest) returns(LeaderboardGetByIdResponse);
     // random entries by score
