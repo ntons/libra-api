@@ -8,61 +8,54 @@ import "libra/v1/chart.proto";
 
 // 标准排行榜，按指定权重由大到小排列元素
 service Leaderboard {
-    // add entry if not on chart
-    rpc Add(LeaderboardAddRequest) returns(LeaderboardAddResponse);
-    // set entry score by id
-    // set entry info if info field not empty
-    rpc SetScore(LeaderboardSetScoreRequest) returns(LeaderboardSetScoreResponse);
-    // incr entry score by id, if id not exists, add it with score
-    // set entry info if info field not empty
-    rpc IncrScore(LeaderboardIncrScoreRequest) returns(LeaderboardIncrScoreResponse);
-    // get entries by range
-    rpc GetRange(LeaderboardGetRangeRequest) returns(LeaderboardGetRangeResponse);
-    // get entries by id
-    rpc GetById(LeaderboardGetByIdRequest) returns(LeaderboardGetByIdResponse);
-    // remove entries by id
-    rpc RemoveById(LeaderboardRemoveByIdRequest) returns(LeaderboardRemoveByIdResponse);
+    // set entries
+    rpc Set(LeaderboardSetRequest) returns(LeaderboardSetResponse);
     // set entry info by id
     rpc SetInfo(LeaderboardSetInfoRequest) returns(LeaderboardSetInfoResponse);
+    // get entries by rank
+    rpc GetByRank(LeaderboardSetRequest) returns(LeaderboardSetResponse);
+    // get entries by id
+    rpc GetById(LeaderboardGetByIdRequest) returns(LeaderboardGetByIdResponse);
     // random entries by score
-    rpc RandByScore(LeaderboardRandByScoreRequest) returns(LeaderboardRandByScoreResponse);
-    //
+    rpc GetByScore(LeaderboardGetByScoreRequest) returns(LeaderboardGetByScoreResponse);
+    // remove entries by id
+    rpc RemoveById(LeaderboardRemoveByIdRequest) returns(LeaderboardRemoveByIdResponse);
+    // only update metadata of chart
     rpc Touch(LeaderboardTouchRequest) returns(LeaderboardTouchResponse);
+
+    // deprecated, will be removed later
+    rpc SetScore(LeaderboardSetScoreRequest) returns(LeaderboardSetScoreResponse);
+    // deprecated, will be removed later
+    rpc GetRange(LeaderboardGetRangeRequest) returns(LeaderboardGetRangeResponse);
 }
 
-message LeaderboardAddRequest {
+message LeaderboardSetRequest {
+    repeated ChartEntry entries = 1;
+    bool only_add = 4;
+    bool only_update = 5;
+    bool incr_by = 6;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardSetResponse {
+    repeated ChartEntry entries = 1;
+}
+
+message LeaderboardSetInfoRequest {
     repeated ChartEntry entries = 1;
     ChartOptions options = 10;
     ChartKey key = 11;
 }
-message LeaderboardAddResponse {
-    repeated ChartEntry entries = 1;
+message LeaderboardSetInfoResponse {
 }
 
-message LeaderboardSetScoreRequest {
-    repeated ChartEntry entries = 1;
-    ChartOptions options = 10;
-    ChartKey key = 11;
-}
-message LeaderboardSetScoreResponse {
-}
-
-message LeaderboardIncrScoreRequest {
-    repeated ChartEntry entries = 1;
-    ChartOptions options = 10;
-    ChartKey key = 11;
-}
-message LeaderboardIncrScoreResponse {
-    repeated ChartEntry entries = 2;
-}
-
-message LeaderboardGetRangeRequest {
+message LeaderboardGetByRankRequest {
     int32 offset = 1;
     int32 count = 2;
     ChartOptions options = 10;
     ChartKey key = 11;
 }
-message LeaderboardGetRangeResponse {
+message LeaderboardGetByRankResponse {
     repeated ChartEntry entries = 1;
 }
 
@@ -75,23 +68,7 @@ message LeaderboardGetByIdResponse {
     repeated ChartEntry entries = 1;
 }
 
-message LeaderboardRemoveByIdRequest {
-    repeated string ids = 1;
-    ChartOptions options = 10;
-    ChartKey key = 11;
-}
-message LeaderboardRemoveByIdResponse {
-}
-
-message LeaderboardSetInfoRequest {
-    repeated ChartEntry entries = 1;
-    ChartOptions options = 10;
-    ChartKey key = 11;
-}
-message LeaderboardSetInfoResponse {
-}
-
-message LeaderboardRandByScoreRequest {
+message LeaderboardGetByScoreRequest {
     message Interval {
         int64 min = 1;
         int64 max = 2;
@@ -101,8 +78,16 @@ message LeaderboardRandByScoreRequest {
     ChartOptions options = 10;
     ChartKey key = 11;
 }
-message LeaderboardRandByScoreResponse {
+message LeaderboardGetByScoreResponse {
     repeated ChartEntry entries = 1;
+}
+
+message LeaderboardRemoveByIdRequest {
+    repeated string ids = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+message LeaderboardRemoveByIdResponse {
 }
 
 message LeaderboardTouchRequest {
@@ -110,4 +95,26 @@ message LeaderboardTouchRequest {
     ChartKey key = 11;
 }
 message LeaderboardTouchResponse {
+}
+
+// deprecated, will be removed later
+message LeaderboardSetScoreRequest {
+    repeated ChartEntry entries = 1;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+// deprecated, will be removed later
+message LeaderboardSetScoreResponse {
+}
+
+// deprecated, will be removed later
+message LeaderboardGetRangeRequest {
+    int32 offset = 1;
+    int32 count = 2;
+    ChartOptions options = 10;
+    ChartKey key = 11;
+}
+// deprecated, will be removed later
+message LeaderboardGetRangeResponse {
+    repeated ChartEntry entries = 1;
 }
