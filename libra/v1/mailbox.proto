@@ -28,6 +28,8 @@ message MailboxListRequest {
         bool regard_not_found_as_empty = 1;
     }
     EntryKey key = 1;
+    // 获取邮件的数量, 0表示全部
+    uint32 count = 2;
     Options options = 10;
 }
 message MailboxListResponse {
