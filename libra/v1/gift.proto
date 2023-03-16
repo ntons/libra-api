@@ -14,6 +14,8 @@ service Gift {
     rpc Revoke (GiftRevokeRequest) returns (GiftRevokeResponse);
     // 更新礼包
     rpc Update (GiftUpdateRequest) returns (GiftUpdateResponse);
+    // 查询礼包
+    rpc List (GiftListRequest) returns (GiftListResponse);
     // 校验礼包码
     rpc Verify (GiftVerifyRequest) returns (GiftVerifyResponse);
     // 兑换礼包码
@@ -49,6 +51,12 @@ message GiftUpdateRequest {
     repeated string codes_to_del = 14;
 }
 message GiftUpdateResponse {
+}
+
+message GiftListRequest {
+}
+message GiftListResponse {
+    repeated GiftData data = 1;
 }
 
 message GiftVerifyRequest {
