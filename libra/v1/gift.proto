@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+import "google/protobuf/any.proto";
+
+// 礼包码
+service Gift {
+    // 创建礼包
+    rpc Create (GiftCreateRequest) returns (GiftCreateResponse);
+    // 撤销礼包
+    rpc Revoke (GiftRevokeRequest) returns (GiftRevokeResponse);
+    // 更新礼包
+    rpc Update (GiftUpdateRequest) returns (GiftUpdateResponse);
+    // 校验礼包码
+    rpc Verify (GiftVerifyRequest) returns (GiftVerifyResponse);
+    // 兑换礼包码
+    rpc Redeem (GiftRedeemRequest) returns (GiftRedeemResponse);
+}
+
+message GiftData {
+    string id = 1;
+    // 过期时间
+    int64 expire_at = 2;
+    // 礼包内容
+    google.protobuf.Any payload = 10;
+}
+
+message GiftCreateRequest {
+    GiftData data = 1;
+    repeated string codes = 10;
+}
+message GiftCreateResponse {
+}
+
+message GiftRevokeRequest {
+    string id = 1;
+}
+message GiftRevokeResponse {
+}
+
+message GiftUpdateRequest {
+    string id = 1;
+    // data中的id被忽略，以上面的id为准
+    GiftData data = 2;
+    repeated string codes_to_add = 13;
+    repeated string codes_to_del = 14;
+}
+message GiftUpdateResponse {
+}
+
+message GiftVerifyRequest {
+    string code = 1;
+}
+message GiftVerifyResponse {
+    GiftData data = 1;
+}
+
+message GiftRedeemRequest {
+    string code = 1;
+}
+message GiftRedeemResponse {
+    GiftData data = 1;
+}
