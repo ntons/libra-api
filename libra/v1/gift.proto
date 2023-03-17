@@ -6,7 +6,11 @@ option go_package = "github.com/ntons/libra-go/api/libra/v1";
 
 import "google/protobuf/any.proto";
 
-// 礼包码
+// 礼包服务
+// 状态码：
+// NotFound 礼包码无效
+// 101      礼包码已兑换
+// 102      礼包码已过期
 service Gift {
     // 创建礼包
     rpc Create (GiftCreateRequest) returns (GiftCreateResponse);
