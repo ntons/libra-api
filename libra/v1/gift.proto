@@ -63,12 +63,12 @@ message GiftListRequest {
     string id = 1;
 }
 message GiftListResponse {
-    message Data {
+    message Entry {
         GiftData data = 1;
         // 只有指定礼包查询才返回
         repeated string codes = 2;
     }
-    repeated Data list = 1;
+    repeated Entry list = 1;
 }
 
 message GiftVerifyRequest {
