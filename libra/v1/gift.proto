@@ -47,7 +47,11 @@ message GiftUpdateRequest {
     string id = 1;
     // data中的id被忽略，以上面的id为准
     GiftData data = 2;
+    // 向礼包中增加新的礼包码
+    // 与已有礼包码重复的会被忽略，但会回复AlreadyExists，
+    // 不与已有礼包码重复的会添加，且不因为AlreadyExists而中断。
     repeated string codes_to_add = 13;
+    // 删除礼包码，会在add之前执行
     repeated string codes_to_del = 14;
 }
 message GiftUpdateResponse {
