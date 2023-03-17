@@ -45,7 +45,7 @@ message GiftRevokeResponse {
 
 message GiftUpdateRequest {
     string id = 1;
-    // data中的id被忽略，以上面的id为准
+    // id被忽略，以上面的id为准
     GiftData data = 2;
     // 向礼包中增加新的礼包码
     // 与已有礼包码重复的会被忽略，但会回复AlreadyExists，
@@ -58,9 +58,17 @@ message GiftUpdateResponse {
 }
 
 message GiftListRequest {
+    // 不填则返回所有礼包信息，但不返回礼包码(太大了)
+    // 填了只返回单个礼包信息，且返回礼包码
+    string id = 1;
 }
 message GiftListResponse {
-    repeated GiftData data = 1;
+    message Data {
+        GiftData data = 1;
+        // 只有指定礼包查询才返回
+        repeated string codes = 2;
+    }
+    repeated Data list = 1;
 }
 
 message GiftVerifyRequest {
