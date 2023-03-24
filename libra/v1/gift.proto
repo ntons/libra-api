@@ -19,7 +19,7 @@ service Gift {
     // 更新礼包
     rpc Update (GiftUpdateRequest) returns (GiftUpdateResponse);
     // 查询礼包
-    rpc List (GiftListRequest) returns (GiftListResponse);
+    rpc Search (GiftSearchRequest) returns (GiftSearchResponse);
     // 校验礼包码
     rpc Verify (GiftVerifyRequest) returns (GiftVerifyResponse);
     // 兑换礼包码
@@ -32,6 +32,12 @@ message GiftData {
     int64 expire_at = 2;
     // 礼包内容
     google.protobuf.Any payload = 10;
+}
+
+message GiftCodeData {
+    string code = 1;
+    // 已兑换标记
+    bool redeemed = 2;
 }
 
 message GiftCreateRequest {
@@ -71,6 +77,22 @@ message GiftListResponse {
         GiftData data = 1;
         // 只有指定礼包查询才返回
         repeated string codes = 2;
+    }
+    repeated Entry list = 1;
+}
+
+// 按顺序判定：
+// 指定礼包ID 返回礼包信息和其中的礼包码
+// 指定礼包码 返回所属礼包信息(没有礼包码)
+// 都不指定 返回所有礼包信息(没有礼包码)
+message GiftSearchRequest {
+    string id = 1;
+    string code = 2;
+}
+message GiftSearchResponse {
+    message Entry {
+        GiftData data = 1;
+        repeated GiftCodeData codes = 2;
     }
     repeated Entry list = 1;
 }
