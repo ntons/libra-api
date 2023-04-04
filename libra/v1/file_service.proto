@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+// 文档服务
+service FileService {
+    rpc Get (FileGetRequest) returns (FileGetResponse);
+    rpc Put (FilePutRequest) returns (FilePutResponse);
+    rpc Del (FileDelRequest) returns (FileDelResponse);
+}
+
+message FileData {
+    string path = 1;
+    bytes content = 2;
+}
+
+message FileGetRequest {
+    string path = 1;
+}
+message FileGetResponse {
+    FileData File = 1;
+}
+
+message FilePutRequest {
+    FileData File = 1;
+}
+message FilePutResponse {
+}
+
+message FileDelRequest {
+    string path = 1;
+}
+message FileDelResponse {
+}
+
