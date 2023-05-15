@@ -29,7 +29,7 @@ message Envelope {
     int32 capacity = 3;
     // using ring buffer to keep mails, order by (importance,pull order)
     bool overridable = 4;
-    // mail importance [-128,127]
+    // mail importance [0,255]
     int32 importance = 5;
 }
 
