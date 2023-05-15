@@ -57,9 +57,12 @@ message MailboxSendRequest {
     message Envelope {
         repeated EntryKey keys = 1;
         google.protobuf.Any data = 2;
-        int32 capacity = 3; // maximum mails to keep
-        bool overridable = 4; // using ring buffer to keep mails, order by (importance,pull order)
-        int32 importance = 5; // importance
+        // maximum mails to keep, [1,65534]
+        int32 capacity = 3;
+        // using ring buffer to keep mails, order by (importance,pull order)
+        bool overridable = 4;
+        // mail importance [-128,127]
+        int32 importance = 5;
     }
     repeated Envelope envelopes = 1;
 }
