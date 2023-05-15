@@ -11,7 +11,7 @@ import "libra/v1/entry_key.proto";
 // 邮件服务，异步通信体系
 service Mailbox {
     rpc List(MailboxListRequest) returns(MailboxListResponse);
-    rpc Push(MailboxPushRequest) returns(MailboxPushResponse);
+    //rpc Push(MailboxPushRequest) returns(MailboxPushResponse);
     rpc Pull(MailboxPullRequest) returns(MailboxPullResponse);
     // 支持批量收件人
     rpc Send(MailboxSendRequest) returns(MailboxSendResponse);
@@ -47,12 +47,12 @@ message MailboxListResponse {
     repeated Mail mails = 1;
 }
 
-message MailboxPushRequest {
-    Envelope envelope = 1;
-}
-message MailboxPushResponse {
-    string id = 1;
-}
+//message MailboxPushRequest {
+//    Envelope envelope = 1;
+//}
+//message MailboxPushResponse {
+//    string id = 1;
+//}
 
 message MailboxPullRequest {
     EntryKey key = 1;
