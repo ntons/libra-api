@@ -20,7 +20,6 @@ service Mailbox {
 message Mail {
     string id = 1;
     google.protobuf.Any data = 2;
-    int32 importance = 3;
 }
 
 message Envelope {
