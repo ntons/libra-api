@@ -58,7 +58,8 @@ message MailboxSendRequest {
         repeated EntryKey keys = 1;
         google.protobuf.Any data = 2;
         int32 capacity = 3; // maximum mails to keep
-        bool remove_earliest_on_full = 4; // using ring to keep mails
+        bool overridable = 4; // using ring buffer to keep mails, order by (importance,pull order)
+        int32 importance = 5; // importance
     }
     repeated Envelope envelopes = 1;
 }
