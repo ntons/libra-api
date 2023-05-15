@@ -22,6 +22,17 @@ message Mail {
     google.protobuf.Any data = 2;
 }
 
+message Envelope {
+    repeated EntryKey keys = 1;
+    google.protobuf.Any data = 2;
+    // maximum mails to keep, [1,65534]
+    int32 capacity = 3;
+    // using ring buffer to keep mails, order by (importance,pull order)
+    bool overridable = 4;
+    // mail importance [-128,127]
+    int32 importance = 5;
+}
+
 message MailboxListRequest {
     message Options {
         // Polling in C# cause NotFound exception which lead to high latency
@@ -37,9 +48,7 @@ message MailboxListResponse {
 }
 
 message MailboxPushRequest {
-    EntryKey key = 1;
-    google.protobuf.Any data = 2;
-    int32 capacity = 3; // maximum mails to keep
+    Envelope envelope = 1;
 }
 message MailboxPushResponse {
     string id = 1;
@@ -54,16 +63,6 @@ message MailboxPullResponse {
 }
 
 message MailboxSendRequest {
-    message Envelope {
-        repeated EntryKey keys = 1;
-        google.protobuf.Any data = 2;
-        // maximum mails to keep, [1,65534]
-        int32 capacity = 3;
-        // using ring buffer to keep mails, order by (importance,pull order)
-        bool overridable = 4;
-        // mail importance [-128,127]
-        int32 importance = 5;
-    }
     repeated Envelope envelopes = 1;
 }
 message MailboxSendResponse {
