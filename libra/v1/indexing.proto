@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+import "google/protobuf/any.proto";
+
+import "libra/v1/entry_key.proto";
+
+// 模糊名字索引，暂时没有好的抽象方式
+service SubstrIndex1Service {
+    // 更新索引
+    rpc Update(SubstrIndex1.UpdateRequest) returns(SubstrIndex1.UpdateResponse);
+    // 删除索引
+    rpc Remove(SubstrIndex1.RemoveRequest) returns(SubstrIndex1.RemoveResponse);
+    // 搜索对象
+    rpc Search(SubstrIndex1.SearchRequest) returns(SubstrIndex1.SearchResponse);
+}
+
+// 字串索引
+message SubstrIndex1 {
+    // 模糊字符串索引对象
+    message Entry {
+        // 对象键
+        EntryKey key = 1;
+        // 索引值
+        string value = 2;
+        // 对象数据
+        google.protobuf.Any data = 3;
+    }
+
+    message UpdateRequest {
+        // 索引ID
+        string index_id = 1;
+        // 要索引的对象
+        Entry entry = 10;
+    }
+    message UpdateResponse {
+    }
+
+    message RemoveRequest {
+        string index_id = 1;
+        repeated EntryKey keys = 2;
+    }
+    message RemoveResponse {
+    }
+
+    message SearchRequest {
+        // 索引ID
+        string index_id = 1;
+        // 搜索关键字
+        string value = 10;
+    }
+    message SearchResponse {
+        repeated Entry entries = 10;
+    }
+}
+
