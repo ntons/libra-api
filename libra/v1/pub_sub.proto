@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package libra.v1;
+
+option go_package = "github.com/ntons/libra-go/api/libra/v1";
+
+import "google/protobuf/any.proto";
+
+service PubSubService {
+    // 发送
+    // 不提供批量发送，因为无法保证原子性
+    rpc Send (PubSub.SendRequest) returns (PubSub.SendResponse);
+    // 读取
+    // 提供起始消息ID，监听并收取该ID及以后的消息
+    rpc Read (PubSub.ReadRequest) returns (stream PubSub.ReadResponse);
+    // 消费
+    // 提供消费组，监听并消费主题消息，消息处理后需要响应ACK
+    // 保证同一个消费组中，主题中的消息都能且只能被消费一次
+    rpc Consume (stream PubSub.ConsumeRequest) returns (stream PubSub.ConsumeResponse);
+}
+
+message PubSub {
+    // 消息
+    message Msg {
+        // 主题
+        string topic = 1;
+        // 消息ID，发送时候不需要填，收取的时候会自动填充
+        string id = 2;
+        // 生产者
+        string producer = 3;
+        // 生产时间
+        int64 produce_at = 4;
+        // 消息载荷
+        oneof value {
+            bytes bin = 11;
+            string str = 12;
+            google.protobuf.Any any = 13;
+        }
+    }
+
+    message SendRequest {
+        message Options {
+            bool create_topic = 1; // 自动创建主题
+            int64 max_len = 2; // 主题保存的消息数量
+            string min_id = 3; // 主题保存的最小ID
+        }
+        Msg msg = 1;
+        Options opts = 2;
+    }
+    message SendResponse {
+    }
+
+    message ReadRequest {
+        message Start {
+            oneof at {
+                // 指定ID之后(不包含指定ID)
+                string after_id = 1;
+                // 指定毫秒时间戳开始
+                int64 since_timestamp_millis = 2;
+            }
+        }
+        map<string, Start> topic_start = 1;
+    }
+    message ReadResponse {
+        repeated Msg msgs = 1;
+    }
+
+    message ConsumeRequest {
+        string group_id = 1;
+        string ack = 2;
+    }
+    message ConsumeResponse {
+        Msg msg = 1;
+    }
+}
