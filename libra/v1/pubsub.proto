@@ -46,13 +46,12 @@ message PubSub {
     }
 
     message SubscribeRequest {
+        // 订阅起始点，要满足所有条件
         message Start {
-            oneof at {
-                // 指定ID之后(不包含指定ID)
-                string after_id = 1;
-                // 指定毫秒时间戳开始
-                int64 since_timestamp_millis = 2;
-            }
+            // 指定ID之后(不包含指定ID)
+            string after_id = 1;
+            // 指定毫秒时间戳开始
+            int64 since_timestamp_millis = 2;
         }
         map<string, Start> topic_start = 1;
     }
