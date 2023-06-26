@@ -45,16 +45,17 @@ message PubSub {
     message PublishResponse {
     }
 
+    message Subscription {
+        string topic = 1;
+        // 每次读取的最大数量(防止包体过大)
+        int32 batch_size = 10;
+        // 指定ID之后(不包含指定ID)
+        string after_id = 11;
+        // 指定毫秒时间戳开始
+        int64 since_milli_timestamp = 12;
+    }
     message SubscribeRequest {
-        // 订阅起始点，要满足所有条件
-        message Start {
-            // 指定ID之后(不包含指定ID)
-            string after_id = 1;
-            // 指定毫秒时间戳开始
-            int64 since_milli_timestamp = 2;
-        }
-        map<string, Start> topic_start = 1;
-        int32 batch_count = 2; // 单次返回数量
+        repeated Subscription subscriptions = 1;
     }
     message SubscribeResponse {
         repeated Message msgs = 1;
