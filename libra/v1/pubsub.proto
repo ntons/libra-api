@@ -51,10 +51,10 @@ message PubSub {
         string app_id = 2;
         // 自动创建主题
         bool auto_create_topic = 7;
-        // 主题保存的消息数量
+        // 消息最大保存数量
         int32 max_len = 8;
-        // 主题保存消息的最长时间
-        int64 timeout_milli = 9;
+        // 消息最长保存时间(毫秒)
+        int64 max_ttl = 9;
         // 主题下的消息
         repeated Msg msgs = 15;
     }
@@ -86,8 +86,8 @@ message PubSub {
         string topic = 1;
         // 消费组
         int32 group_id = 2;
-        // 消费处理响应超时时间
-        int64 ack_timeout_milli = 3;
+        // 消费处理响应超时时间(毫秒)
+        int64 ack_timeout = 3;
     }
     message Ack {
         // 主题
