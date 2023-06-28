@@ -12,6 +12,8 @@ service PubSubService {
     rpc Publish (PubSub.PublishRequest) returns (PubSub.PublishResponse);
     // 订阅
     rpc Subscribe (PubSub.SubscribeRequest) returns (stream PubSub.SubscribeResponse);
+    // 消费，如果当时不可消费则阻塞等待直到超时或有可用信息
+    rpc Consume (PubSub.ConsumeRequest) returns (PubSub.ConsumeResponse);
 }
 
 message PubSub {
@@ -58,6 +60,34 @@ message PubSub {
         repeated Subscription subscriptions = 1;
     }
     message SubscribeResponse {
+        repeated Message msgs = 1;
+    }
+
+    message Consumption {
+        // 主题
+        string topic = 1;
+        // 消费组
+        int32 group_id = 2;
+        // 消费处理响应超时时间
+        int64 ack_timeout_milli = 3;
+    }
+    message Ack {
+        // 主题
+        string topic = 1;
+        // 消费组
+        int32 group_id = 2;
+        // 确认的消息ID
+        repeated string msg_ids = 3;
+    }
+    message ConsumeRequest {
+        // 消费者标识
+        //string consumer = 1;
+        // 消费
+        repeated Consumption consumptions = 6;
+        // 确认消息处理完成
+        repeated Ack acks = 10;
+    }
+    message ConsumeResponse {
         repeated Message msgs = 1;
     }
 }
