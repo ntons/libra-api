@@ -17,37 +17,55 @@ service PubSubService {
 }
 
 message PubSub {
-    message Message {
-        // 主题
-        string topic = 1;
-        // 消息ID，发送时候不需要填，收取的时候会自动填充
-        string id = 2;
+    // 消息结构
+    message Msg {
         // 生产者
-        string producer = 3;
-        // 生产时间
-        int64 produce_at = 4;
+        string producer = 1;
+        // 产生时间
+        int64 produce_at = 2;
         // 消息载荷
         oneof value {
-            bytes bin = 11;
-            string str = 12;
-            google.protobuf.Any any = 13;
+            // 二进制载荷
+            bytes bin = 7;
+            // 字符串载荷
+            string str = 8;
+            // PB载荷
+            google.protobuf.Any any = 9;
         }
+        // 主题
+        string topic = 10;
+        // 消息ID
+        // 在Subscribe/Consume回复中自动填充
+        // Publish填充此字段无效
+        string id = 11;
+        // 消费者组
+        // 在Consume回复中自动填充
+        // Publish填充此字段无效
+        int32 group_id = 12;
     }
 
-    message Options {
-        bool create_topic = 1; // 自动创建主题
-        int64 max_len = 2; // 主题保存的消息数量
-        string min_id = 3; // 主题保存的最小ID
+    message Publication {
+        // 主题
+        string topic = 1;
+        // 允许跨应用发送消息
+        string app_id = 2;
+        // 自动创建主题
+        bool auto_create_topic = 7;
+        // 主题保存的消息数量
+        int32 max_len = 8;
+        // 主题保存消息的最长时间
+        int64 timeout_milli = 9;
+        // 主题下的消息
+        repeated Msg msgs = 15;
     }
-
     message PublishRequest {
-        repeated Message msgs = 1;
-        Options opts = 2;
+        repeated Publication publications = 1;
     }
     message PublishResponse {
     }
 
     message Subscription {
+        // 主题
         string topic = 1;
         // 每次读取的最大数量(防止包体过大)
         int32 batch_size = 10;
@@ -60,7 +78,7 @@ message PubSub {
         repeated Subscription subscriptions = 1;
     }
     message SubscribeResponse {
-        repeated Message msgs = 1;
+        repeated Msg msgs = 1;
     }
 
     message Consumption {
@@ -80,14 +98,12 @@ message PubSub {
         repeated string msg_ids = 3;
     }
     message ConsumeRequest {
-        // 消费者标识
-        //string consumer = 1;
         // 消费
-        repeated Consumption consumptions = 6;
+        repeated Consumption consumptions = 1;
         // 确认消息处理完成
         repeated Ack acks = 10;
     }
     message ConsumeResponse {
-        repeated Message msgs = 1;
+        repeated Msg msgs = 1;
     }
 }
