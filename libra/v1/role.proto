@@ -24,6 +24,8 @@ message RoleData {
     string id = 1;
     uint32 index = 2;
     string user_id = 3;
+    int64 create_at = 5;
+    int64 sign_in_at = 6;
     map<string, string> metadata = 15;
 }
 
