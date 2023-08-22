@@ -18,6 +18,8 @@ service Role {
     rpc SignIn(RoleSignInRequest) returns(RoleSignInResponse);
     rpc SetMetadata(RoleSetMetadataRequest) returns(RoleSetMetadataResponse);
     rpc GetMetadata(RoleGetMetadataRequest) returns(RoleGetMetadataResponse);
+    // 修改角色index
+    rpc AlterIndex(RoleAlterIndexRequest) returns (RoleAlterIndexResponse);
 }
 
 message RoleData {
@@ -76,3 +78,10 @@ message RoleSignInRequest {
 message RoleSignInResponse {
 }
 
+message RoleAlterIndexRequest {
+    string role_id = 1;
+    uint32 index = 2;
+}
+message RoleAlterIndexResponse {
+    RoleData role = 1;
+}
