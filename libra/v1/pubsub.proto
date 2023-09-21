@@ -60,7 +60,7 @@ message PubSub {
     }
     message PublishRequest {
         repeated Publication publications = 1;
-        int64 delay = 2; // 延迟发送(秒)
+        int32 delay = 2; // 延迟发送(秒)
     }
     message PublishResponse {
     }
